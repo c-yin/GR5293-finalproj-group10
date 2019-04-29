@@ -9,18 +9,30 @@ output:
     css: style.css
 ---
 
-```{r, message=FALSE, warning=FALSE, echo=FALSE}
+```{r message=FALSE, warning=FALSE, echo=FALSE}
 library(tidyverse)
 library(gridExtra)
 library(plotly)
 library(extracat)
+library(summarytools)
+st_options(
+  bootstrap.css = FALSE,
+  plain.ascii = FALSE,
+  style = "rmarkdown",
+  dfSummary.silent = TRUE,
+  footnote = NA,
+  subtitle.emphasis = FALSE
+)
+library(knitr)
+opts_chunk$set(comment = NA,prompt = FALSE,cache = FALSE,results = "asis")
+#st_css()
 ```
 
 ## I. Introduction
 ***
 
 
-<br><br><br><br>
+<br><br>
 
 ## II. Data source
 ***
@@ -92,42 +104,56 @@ Bio dataset contains players' biographical data:
 
 Teams in NBA keep changing in these 15 years. Three teams change their team locations and team names thus we may find the teams are not necessarily the same each year. Players can be traded and signed during the season, which makes some players have more records than others in these datasets.
 
-Also all data are saved as factor, which requires me convert them to numeric or character.
+Also all data are saved as factor, which requires us to convert them to numeric or character.
 
-<br><br><br><br>
+<br><br>
 
 ## III. Data cleaning
 ***
 
 ```{r, echo=FALSE}
 load('data/tidy/Player.RData')
+load('data/tidy/Players_bio.RData')
 load('data/tidy/Team_splits.RData')
 load('data/tidy/Team_shooting.RData')
 ```
 
-After we got all the raw data in **data/raw**, we wanted to combine them into three datasets: `Team_splits`, `Team_shoots`, `Player`.
+After we got all the raw data in **data/raw**, we wanted to combine them into four datasets: `Team_splits`, `Team_shoots`, `Player` & `Players_bio`.
 
 For the players' data, we first remove empty rows and columns and turn the variables into numerics and characters according to their content. Considering more and more players can play more than one position today, we group the players into three kinds: Guards, Wings and Bigs instead of the origin positions they play. And finally we combind players data of all 15 years and got `Player`.
 
-```{r}
-str(Player)
+_Scroll down the table to see more details_
+
+```{r warning=FALSE,message=FALSE}
+print(dfSummary(Player,headings = FALSE,plain.ascii = FALSE,valid.col = FALSE,graph.magnif = 0.75,style = "grid"),max.tbl.height = 500,method='render')
 ```
+
+For `Players_bio` data, we join players' data and biographical data and turn the variables into numerics and characters according to their content. 
+
+_Scroll down the table to see more details_
+```{r warning=FALSE,message=FALSE}
+print(dfSummary(players_bio,headings = FALSE,plain.ascii = FALSE,valid.col = FALSE,graph.magnif = 0.75,style = "grid"),max.tbl.height = 500,method='render')
+```
+
+
 
 For teams' data, we split them into two datasets `Team_split` and `Team_shooting`.
 
 `Teams_splits` contains all the 'per game' stats for each 30 team every season. We choose 'Location' filter because all the teams have to play 41 Home game and 41 Road games every year and we simply calculate the mean to get seasonal average stats. We changed the format, removed the ranking variables, combined the basic with advanced data, and put all 15 years data into this one dataset.
 
-```{r}
-str(Team_splits)
+_Scroll down the table to see more details_
+```{r warning=FALSE,message=FALSE}
+print(dfSummary(Team_splits,headings = FALSE,plain.ascii = FALSE,valid.col = FALSE,graph.magnif = 0.75,style = "grid"),max.tbl.height = 500,method='render')
 ```
 
 `Team_shooting` contains all the shooting performance of each team from different regions on the court. We cleaned them the same way as `Team_splits`
 
-```{r}
-str(Team_shooting)
+_Scroll down the table to see more details_
+```{r warning=FALSE,message=FALSE}
+print(dfSummary(Team_shooting,headings = FALSE,plain.ascii = FALSE,valid.col = FALSE,graph.magnif = 0.75,style = "grid"),max.tbl.height = 500,method='render')
 ```
 
-<br><br><br><br>
+<br><br>
 
 ## IV. Missing values
 ***
