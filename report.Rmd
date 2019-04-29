@@ -169,7 +169,7 @@ Figure 1 shows that the marjority of the data has no missing values.
 
 Those lines that have missed _yearstart_ variable also missed all the following variables. This is because these columns come from another table: bio. Although the bio table itself has no missing values, it does not contain all the players as `Player` data has.
 
-Also, we can see that there are quite some rows missing _3PA_ values. This _3PA_ refers to the total 3 points filed goal
+Also, we can see that there are quite some rows missing _3PA_ values, _FT_ values etc. These varibales are related to player's shooting data per season. The missing values mean that these players do not shoot that season.
 
 <br><br>
 
