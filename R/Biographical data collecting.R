@@ -27,9 +27,16 @@ for (year in 2005:2019) {
 
 # Binding the previous players' data to biographical data
 bio <- read.csv("../data/raw/player_data.csv",as.is = TRUE)
+convert_height <- function(df)
+{
+  result <- strsplit(df,"-")[[1]]
+  result <- as.numeric(result[1])*30.48+as.numeric(result[2])*2.54
+  return(result)
+}
+h <- sapply(bio$height,convert_height)
+bio$height <- h
 
 Players_bio <- data%>%
   left_join(bio,by=c("Player"="name"))
 
-save(players_bio,file="../data/tidy/Players_bio.RData")
-
+save(Players_bio,file="../data/tidy/Players_bio.RData")
