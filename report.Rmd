@@ -1,33 +1,45 @@
 ---
 title: "NBA's 15 Years"
-author: "Chao Yin"
-date: "4/14/2019"
+author: "Chao Yin, Zeyu Yang"
 output: 
   html_document:
     code_folding: hide
+    toc: true
+    theme: lumen
+    css: style.css
 ---
 
 ```{r, message=FALSE, warning=FALSE, echo=FALSE}
 library(tidyverse)
 library(gridExtra)
 library(plotly)
+library(extracat)
 ```
 
-## Introduction
+## I. Introduction
+***
 
-## Data source
+
+<br><br><br><br>
+
+## II. Data source
+***
 
 ### Collection
 
-Chao Yin is mainy responible for collection of team/player game stats data while Zeyu Yang is responsible for players' biographical and salaries information.
+_Chao Yin_ is mainy responible for collection of team/player game stats data while _Zeyu Yang_ is responsible for players' biographical and salaries information.
 
-Our data is collected from [Basketball-Reference](https://www.basketball-reference.com/) and [Stats NBA](https://stats.nba.com/). 
+Our data is collected from [Basketball-Reference](https://www.basketball-reference.com/), [Stats NBA](https://stats.nba.com/) and [Kaggle](https://www.kaggle.com/drgilermo/nba-players-stats).
 
 * *Basketball Reference* is a site providing both basic and sabermetric statistics and resources for basketball fans using offical NBA data. 
 
 * *Stats NBA* is the home of NBA Advanced Stats and provides  official NBA Statistics and advanced analytics. 
 
+* *Kaggle* is an online community that allows users to find and publish data sets. 
+
 Data in Basketball-Reference is stored in XML so that we can directly extract them using packages `XML` and `RCurl`. However, some tables on this site are commented and they can only be downloaded manually in csv form thus we choose Stats NBA for other data. It's a bit harder to extract data tables from Stats NBA than from Basketball-Reference since they are stored in json files. We use `statsnbaR` which provides utility functions to download data from the API end-points of Stats NBA. We got `teams` from Basketball -Reference and `players` from Stats NBA.
+
+Kaggle is the source of player's biographical data. The aforementioned two sites can also provide the same data but the data is harded to collect since it is not stored in tables.
 
 ### Datasets and variables
 
@@ -50,6 +62,7 @@ Advanced data measures and analysis player's ability in one percific area :
 * Rebound ability like Offensive Rebound Percentage, Defensive Rebound Percentage, Rebound Percentage
 
 * Shooting ability like Effective Field Goal Percentage, True Shooting Percentage
+<br><br>
 
 `teams` datasets contains similar information as shown in the `players` but corresponds to each team in the league. However, `teams` provides ways to split the data in order to measure the teams' performance from different angles:
 
@@ -67,7 +80,10 @@ Teams in NBA keep changing in these 15 years. Three teams change their team loca
 
 Also all data are saved as factor, which requires me convert them to numeric or character.
 
-## Data cleaning
+<br><br><br><br>
+
+## III. Data cleaning
+***
 
 ```{r, echo=FALSE}
 load('data/tidy/Player.RData')
@@ -97,7 +113,17 @@ str(Team_splits)
 str(Team_shooting)
 ```
 
-## Results
+<br><br><br><br>
+
+## IV. Missing values
+***
+
+
+
+<br><br><br><br>
+
+## V. Results
+***
 
 ### Overall Offensive Performance
 
