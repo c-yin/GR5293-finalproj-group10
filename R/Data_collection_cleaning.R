@@ -32,7 +32,10 @@ for (year in 2004:2019) {
     distinct(Player, Tm, .keep_all = TRUE)
     mutate(Pos = factor(Pos, levels = c('PG', 'PG-SG', 'PG-SF', 'SG-PG', 'SG', 'SG-SF', 'SG-PF', 'SF-SG', 'SF', 'SF-PF', 'PF-SF', 'PF', 'PF-C', 'C-PF', 'C')))
     levels(P$Pos) = c('Guards', 'Guards', 'Guards', 'Guards', 'Guards', 'Wings', 'Wings', 'Wings', 'Wings', 'Wings', 'Wings', 'Bigs', 'Bigs', 'Bigs', 'Bigs')
+    P[P$Tm=='BRK',]$Tm = 'BKN'
+    P[P$Tm=='CHA' & P$year <= 2014,]$Tm = 'CHB'
   P <- bind_cols(P, year = rep(year, dim(P)[1]))
+  
   Player <- bind_rows(Player, P)
 
   team_names = unique(teams$nameTeam)
