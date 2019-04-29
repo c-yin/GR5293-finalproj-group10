@@ -29,7 +29,9 @@ st_options(
 )
 library(knitr)
 opts_chunk$set(comment = NA,prompt = FALSE,cache = FALSE,results = "asis")
-#st_css()
+library(data.table)
+library(DT)
+library(knitr)
 ```
 
 ## I. Introduction
@@ -260,6 +262,29 @@ ggplot()+
         axis.text.y = element_text(color = "#000000", size = 11))
 ```
 
+This plot presents the average height/weight ratio of the players. It reflects players' the body shape. There is clear increasing trend of this ratio after 2011.
+
+While the average height and average weight has not changed much for past 15 years(as we can see in the following table), the increase of the height/weight ratio means the weight is relatively decreasing compared with the height, which suggests the players are becoming more and more facile and fast.
+```{r}
+data <- Players_bio%>%
+  filter(Year>=2004)%>%
+  select(Player,height,weight,Year)%>%
+  distinct()%>%
+  drop_na()%>%
+  as.data.frame(stringsAsFactors = F)%>%
+  select(height,weight,Year)%>%
+  dplyr::group_by(Year)%>%
+  dplyr::summarise(avg_h=round(mean(height),1),avg_w=round(mean(weight),1))%>%
+  dplyr::ungroup()%>%
+  column_to_rownames(var="Year")%>%
+  t()%>%
+  as.data.frame(stringsAsFactors = FALSE)%>%
+  setDT(keep.rownames = TRUE)
+colnames(data)[1] <- c("Item")
+# datatable(data)
+knitr::kable(data)
+```
+
 
 
 
@@ -293,26 +318,34 @@ There 's an obvious trend in both **Pace** (the number of possessions a team use
 We can see that from 2004 to 2013 the pace and PPG are fluctuating around 93 and 98 respectively, but from 2014 these two stats keep growing and especially in 2019 the pace rise to 101 from 98 last year and PPG increases by nearly 6 points more than last season. It's easy to find a positive associaiton between pace and PPG since the more possessions you have the more chances you can score, though also gives their opponents more chances.
 
 
-_* The formula for pace is: ((Tm Poss + Opp Poss) / (2 x (Tm MP / 5))). The first part of the equation sums Team Possessions and Opponent's Possessions. The latter half of the equation uses Team Minutes Played, which is the total number of minutes played by each player on the team._[StatNBA](-- https://www.sportingcharts.com/dictionary/nba/pace-factor.aspx)
+_* The formula for pace is: ((Tm Poss + Opp Poss) / (2 x (Tm MP / 5))). The first part of the equation sums Team Possessions and Opponent's Possessions. The latter half of the equation uses Team Minutes Played, which is the total number of minutes played by each player on the team._  [StatNBA](-- https://www.sportingcharts.com/dictionary/nba/pace-factor.aspx)
 
 
 ```{r, message=FALSE,fig.align="center"}
 Team_splits %>% select(year, ortg, pctWins) %>% group_by(year) %>%
-  ggplot(aes(x = year, y=ortg, alpha = pctWins, color = 1-pctWins)) +
+  ggplot(aes(x = year, y=ortg, alpha = pctWins, color = pctWins)) +
   geom_jitter(size = 2) +
-  geom_smooth(linetype = 'longdash', colour = '#C9082A', se = FALSE, size = 2) +
+  scale_colour_gradient(low = "#8ec5ff", high = "#19293a")+
+  geom_smooth(linetype = 'longdash', colour = '#C9082A', se = FALSE, size = 2, show.legend = F) +
   scale_x_continuous(labels = unique(Team_splits$year), breaks = unique(Team_splits$year)) +
+  guides(alpha=FALSE)+
   ggtitle('Average Offensive Rating Per Game') +
   xlab('') +
   ylab('') +
+  labs(colour="% Win")+
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, vjust = 0.5,color = "#000000", size = 11),
         axis.text.y = element_text(color = "#000000", size = 11),
-        plot.title = element_text(size = 17.5, face = 'bold'),
-        legend.position = 'none') 
+        plot.title = element_text(size = 17.5, face = 'bold')) 
 ```
 
-This plot shows average **offrtg** (offensive rating, a statistic used to measure a team's offensive performance) of each teams in these 15 years. The color reflects the Win Percentage of each team. The darker the marker is, the more the team wins. Offensive Rating shows that the offensive ability of each team started growing from 2013 and reached an unprecedented level in 2018. We are curious about is there any other reasons for such high offensive performance these years except the high pace?
+This plot shows average **offrtg** (offensive rating, a statistic used to measure a team's offensive performance) of each teams in these 15 years. The color reflects the Win Percentage of each team. The darker the marker is, the more the team wins. 
+
+The dashed line is the fitted line of the data. It seems that teams with higher offensive rating(points above the dashed line) tends to have a higher Win Percentage(Darker points).
+
+Offensive Rating shows that the offensive ability of each team started growing from 2013 and reached an unprecedented level in 2018. We are curious about is there any other reasons for such high offensive performance these years except the high pace?
+
+_* offrtg = 100x((Points)/(POSS). It measures a team's points scored per 100 possessions. On a player level, this statistic is team points scored per 100 possessions while he is on court._  [StatNBA](-- https://www.sportingcharts.com/dictionary/nba/pace-factor.aspx)
 
 ### Scoring 
 
@@ -423,19 +456,22 @@ This may explain how the NBA teams makes it to keeping throwing more 3 pointers 
 
 ```{r, message=FALSE,fig.align="center"}
 Team_splits %>% select(year, pctTS, pctWins) %>% group_by(year) %>%
-  ggplot(aes(x = year, y=pctTS, alpha = pctWins, color = 1-pctWins)) +
+  ggplot(aes(x = year, y=pctTS, alpha = pctWins, color = pctWins)) +
   geom_jitter(size = 2) +
-  geom_smooth(linetype = 'longdash', colour = '#C9082A', se = FALSE, size = 2) +
+  scale_colour_gradient(low = "#8ec5ff", high = "#19293a")+
+  geom_smooth(linetype = 'longdash', colour = '#C9082A', se = FALSE, size = 2, show.legend = F) +
   theme(axis.text.x = element_text(angle = 45, vjust = 0.5), legend.position = 'none') +
   scale_x_continuous(labels = unique(Team_splits$year), breaks = unique(Team_splits$year)) +
   ggtitle('Average True Shooting Percentage Per Game') +
+  guides(alpha=FALSE)+
   xlab('') +
   ylab('') +
+  labs(colour="% Win")+
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, vjust = 0.5,color = "#000000", size = 11),
         axis.text.y = element_text(color = "#000000", size = 11),
-        plot.title = element_text(size = 17.5, face = 'bold'),
-        legend.position = 'none') 
+        plot.title = element_text(size = 17.5, face = 'bold'))
+# legend.position = 'none'
 ```
 
 **TS%** (True Shooting Percentage, measures efficiency at shooting the ball) synthesizes field goal percentage, free throw percentage, and three-point field goal percentage instead of take them individually to calculate shooting more accurately. The same as before, the darker the marker is, the more the team wins. It's easy to find that the curve of TS% shares the simialr shape of that of offrtg curve and teams at present shoots much more efficiently than 15 years ago.
@@ -471,17 +507,20 @@ In this plot, we can see that the assit rising dramaticly in 2013 and since then
 
 ```{r, message=FALSE,fig.align="center"}
 Team_splits %>% select(year, ratioAST, pctWins) %>% group_by(year) %>%
-  ggplot(aes(x = year, y=ratioAST, alpha = pctWins, color = 1-pctWins)) +
+  ggplot(aes(x = year, y=ratioAST, alpha = pctWins, color = pctWins)) +
   geom_jitter(size = 2) +
-  geom_smooth(linetype = 'longdash', colour = '#C9082A', se = FALSE, size = 2) +
+  scale_colour_gradient(low = "#8ec5ff", high = "#19293a")+
+  geom_smooth(linetype = 'longdash', colour = '#C9082A', se = FALSE, size = 2, show.legend = F) +
   scale_x_continuous(labels = unique(Team_splits$year), breaks = unique(Team_splits$year)) +
+  guides(alpha=FALSE)+
   ggtitle('Assist Ratio Per Game') +
   xlab('') +
   ylab('') +
+  labs(colour="% Win")+
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, vjust = 0.5,color = "#000000", size = 11), 
         axis.text.y = element_text(color = "#000000", size = 11),
-        legend.position = 'none',
+        #legend.position = 'none',
         plot.title = element_text(size = 17.5, face = 'bold'))
 ```
 
