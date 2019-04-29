@@ -45,6 +45,7 @@ Kaggle is the source of player's biographical data. The aforementioned two sites
 
 `players` datasets contains all regular season information of all players in one season. 
 
+<br>
 General data provides basic players' performance including:
 
 * Profile information like Name, Team, Age, Game Played, Minutes Played, etc.
@@ -53,6 +54,7 @@ General data provides basic players' performance including:
 
 * Basic stats per game like Rebounds, Assists, Steals, Blocks, Points, Turnovers, Personal Fouls, etc.
 
+<br>
 Advanced data measures and analysis player's ability in one percific area :
 
 * Overall ratings like Offensive Rating, Defensive Rating, Net Rating, Player Impact Estimate, Usage Percentage, etc.
@@ -62,6 +64,18 @@ Advanced data measures and analysis player's ability in one percific area :
 * Rebound ability like Offensive Rebound Percentage, Defensive Rebound Percentage, Rebound Percentage
 
 * Shooting ability like Effective Field Goal Percentage, True Shooting Percentage
+
+<br>
+Bio dataset contains players' biographical data:
+
+* The year player starts playing at NBA and the year he retires
+
+* Height and weight data
+
+* Birth date
+
+* College attended
+
 <br><br>
 
 `teams` datasets contains similar information as shown in the `players` but corresponds to each team in the league. However, `teams` provides ways to split the data in order to measure the teams' performance from different angles:
