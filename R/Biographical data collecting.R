@@ -26,10 +26,10 @@ for (year in 2005:2019) {
 }
 
 # Binding the previous players' data to biographical data
-bio <- read.csv("../data/player_data.csv",as.is = TRUE)
+bio <- read.csv("../data/raw/player_data.csv",as.is = TRUE)
 
-players_bio <- data%>%
+Players_bio <- data%>%
   left_join(bio,by=c("Player"="name"))
 
-save(players_bio,file="../data/tidy/players_bio.RData")
+save(players_bio,file="../data/tidy/Players_bio.RData")
 
