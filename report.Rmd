@@ -14,6 +14,7 @@ output:
 
 ```{r message=FALSE, warning=FALSE, echo=FALSE}
 library(tidyverse)
+library(ggridges)
 library(gridExtra)
 library(plotly)
 library(extracat)
@@ -157,6 +158,9 @@ _Scroll down the table to see more details_
 print(dfSummary(Team_shooting,headings = FALSE,plain.ascii = FALSE,valid.col = FALSE,graph.magnif = 0.75,style = "grid"),max.tbl.height = 500,method='render')
 ```
 
+
+_* To understand the meaning of all variables, please visit [StatsNBA](https://stats.nba.com/help/glossary/)._
+
 <br><br>
 
 ## IV. Missing values
@@ -167,9 +171,9 @@ As we can see in the aforementioned tables, there is no missing value in `Teams_
 ```{r fig.align="center",fig.cap="Figure 1: Missing values"}
 visna(Players_bio)
 ```
-Figure 1 shows that the marjority of the data has no missing values.
+The first row in Figure 1 shows that the marjority of the data has no missing values.
 
-Those lines that have missed _yearstart_ variable also missed all the following variables. This is because these columns come from another table: bio. Although the bio table itself has no missing values, it does not contain all the players as `Player` data has.
+Those rows that have missed *year_start* variable also missed all the following variables. This is because these columns come from another table: bio. Although the bio table itself has no missing values, it does not contain all the players as `Player` data has.
 
 Also, we can see that there are quite some rows missing _3PA_ values, _FT_ values etc. These varibales are related to player's shooting data per season. The missing values mean that these players do not shoot that season.
 
@@ -177,6 +181,87 @@ Also, we can see that there are quite some rows missing _3PA_ values, _FT_ value
 
 ## V. Results
 ***
+
+### Age
+```{r message=FALSE,error=FALSE,warning=FALSE,fig.align="center"}
+data <- Players_bio%>%
+  filter(Year>=2004)%>%
+  select(Player,Age,Year)%>%
+  distinct()%>%
+  as.data.frame(stringsAsFactors = F)%>%
+  select(Age,Year)
+# ggplot(data,aes(x=as.factor(Year),y=Age))+geom_boxplot()
+
+ggplot(data, aes(x=Age, y=Year,group=Year)) +
+  stat_density_ridges(quantile_lines = TRUE, quantiles = 2, fill="grey80") +
+  geom_text(data=data %>% group_by(Year) %>% 
+              summarise(Age=median(Age)),
+            aes(label=sprintf("%1.1f", Age)), 
+            position=position_nudge(y=-0.1), colour="#17408B", size=3)+
+  geom_text(data=data %>% group_by(Year) %>% 
+              summarise(Age=min(Age)),
+            aes(label=sprintf("%1.1f", Age)), 
+            position=position_nudge(y=-0.1), colour="#17408B", size=3)+
+  geom_text(data=data %>% group_by(Year) %>% 
+              summarise(Age=max(Age)),
+            aes(label=sprintf("%1.1f", Age)), 
+            position=position_nudge(y=-0.1), colour="#17408B", size=3)+
+  xlab("")+
+  ylab("")+
+  ggtitle("Age Distibution")+
+  scale_y_continuous(breaks=seq(2004,2019))+
+  scale_x_continuous(breaks=seq(15,45,3))+
+  theme_minimal()+
+  theme(
+    plot.title = element_text(size=17.5,face="bold"),
+    axis.text.x = element_text(color = "#000000", size = 11),
+    axis.text.y = element_text(color = "#000000", size = 11))
+```
+
+The ridge plot presents the distribution of the NBA players' age by year. The x-axis is the age, the y-axix is the year, the height of each line is the probability of this particular age.
+
+The three numbers on each distribution is min age, median age and max age(from left to right) of that season.
+
+As we can see from the plot, the distribution of age has not changed greatly--the majority ages of players are around 20-35. The median age changes slightly from 26 to 25.
+
+We can also notice that there is a jump in the minimum age between 2006 and 2007. The minimum age before 2006 is 18 while the minimum age after 2006 is 19. This is because in 2006, NBA had increased the draft-eligible age from 18 to 19. 
+
+Another noticeable point is the maximum age. It has serveral increases and decreases. Every increase is mainly caused by one player. Take the increase from 2015 to 2019 as an example, the eldest player is Vince Carter. He is almost the eldest player in NBA history. The reason why these players are still playing is due to multiple reasons: they are still active players, they are not suffered from serious injuries etc.
+
+
+### Height/Weight Ratio
+```{r fig.align="center"}
+data <- Players_bio%>%
+  filter(Year>=2004)%>%
+  select(Player,height,weight,Year)%>%
+  distinct()%>%
+  drop_na()%>%
+  as.data.frame(stringsAsFactors = F)%>%
+  select(height,weight,Year)%>%
+  dplyr::group_by(Year)%>%
+  dplyr::summarise(avg_h=mean(height),avg_w=mean(weight))%>%
+  dplyr::ungroup()%>%
+  mutate(hw_ratio=avg_h/avg_w)%>%
+  select(Year,hw_ratio)
+
+
+ggplot()+
+  geom_line(aes(x=Year,y=hw_ratio),data=data,color="#C9082A",size=2)+
+  geom_point(aes(x=Year,y=hw_ratio),data=data,color="#C9082A",size=4)+
+  geom_point(aes(x=Year,y=hw_ratio),data=data,color="white",size=2)+
+  scale_x_continuous(breaks=seq(2004,2019))+
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1))+
+  xlab('') +
+  ylab('') +
+  theme_minimal()+
+  ggtitle("Average Height/Weight Ratio Per Season")+
+  theme(plot.title = element_text(size=17.5,face="bold"),
+        axis.text.x = element_text(angle = 45, hjust = 1,color = "#000000", size = 11),
+        axis.text.y = element_text(color = "#000000", size = 11))
+```
+
+
+
 
 ### Overall Offensive Performance
 
@@ -194,8 +279,8 @@ Team_splits %>% select(year, pts, pace) %>% group_by(year) %>% summarise(Pace = 
   ylab('') +
   ggtitle('Pace and Points Per Game') +
   theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, vjust = 0.5,color = "#000000", size = 10), 
-        axis.text.y = element_text(color = "#000000", size = 10), 
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5,color = "#000000", size = 11), 
+        axis.text.y = element_text(color = "#000000", size = 11), 
         strip.text.y = element_text(size = 10, colour = '#FFFFFF', face = 'bold'),
         strip.background = element_rect(fill = '#17408B', colour = 'white'),
         plot.title = element_text(size = 17.5, face = 'bold'),
@@ -203,7 +288,13 @@ Team_splits %>% select(year, pts, pace) %>% group_by(year) %>% summarise(Pace = 
 ```
 
 
-There 's an obvious trend in both **Pace** (the number of possessions a team uses per game) and **PPG** (Points Per Game) of NBA games in recent 15 years. We can see that from 2004 to 2013 the pace and PPG are fluctuating around 93 and 98 respectively, but from 2014 these two stats keep growing and especially in 2019 the pace rise to 101 from 98 last year and PPG increases by nearly 6 points more than last season. It's easy to find a positive associaiton between pace and PPG since the more possessions you have the more chances you can score.
+There 's an obvious trend in both **Pace** (the number of possessions a team uses per game) and **PPG** (Points Per Game) of NBA games in recent 15 years. The more possessions a team accumulates, the quicker the pace of the game.
+
+We can see that from 2004 to 2013 the pace and PPG are fluctuating around 93 and 98 respectively, but from 2014 these two stats keep growing and especially in 2019 the pace rise to 101 from 98 last year and PPG increases by nearly 6 points more than last season. It's easy to find a positive associaiton between pace and PPG since the more possessions you have the more chances you can score, though also gives their opponents more chances.
+
+
+_* The formula for pace is: ((Tm Poss + Opp Poss) / (2 x (Tm MP / 5))). The first part of the equation sums Team Possessions and Opponent's Possessions. The latter half of the equation uses Team Minutes Played, which is the total number of minutes played by each player on the team._[StatNBA](-- https://www.sportingcharts.com/dictionary/nba/pace-factor.aspx)
+
 
 ```{r, message=FALSE,fig.align="center"}
 Team_splits %>% select(year, ortg, pctWins) %>% group_by(year) %>%
@@ -215,8 +306,8 @@ Team_splits %>% select(year, ortg, pctWins) %>% group_by(year) %>%
   xlab('') +
   ylab('') +
   theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, vjust = 0.5,color = "#000000", size = 10),
-        axis.text.y = element_text(color = "#000000", size = 10),
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5,color = "#000000", size = 11),
+        axis.text.y = element_text(color = "#000000", size = 11),
         plot.title = element_text(size = 17.5, face = 'bold'),
         legend.position = 'none') 
 ```
@@ -241,8 +332,8 @@ p1 <- Team_splits %>% select(year, fg3a, fg2a) %>%
   #ylim(0, 2500) +
   ggtitle('Field Goals Attempt') +
   theme_minimal() +
-  theme(axis.text.x = element_text(angle = 60, vjust = 0.5,color = "#000000", size = 10),
-        axis.text.y = element_text(color = "#000000", size = 10),
+  theme(axis.text.x = element_text(angle = 60, vjust = 0.5,color = "#000000", size = 11),
+        axis.text.y = element_text(color = "#000000", size = 11),
         strip.text.y = element_text(size = 10, colour = '#FFFFFF', face = 'bold'),
         strip.background = element_rect(fill = '#17408B', colour = 'white'),
         plot.title = element_text(size = 17.5, face = 'bold'),
@@ -261,8 +352,8 @@ p2 <- Team_splits %>% select(year, pctFG3, pctFG2) %>%
   ylab('') +
   ggtitle('Field Goals Percentage') +
   theme_minimal() + 
-  theme(axis.text.x = element_text(angle = 60, vjust = 0.5,color = "#000000", size = 10),
-        axis.text.y = element_text(color = "#000000", size = 10),
+  theme(axis.text.x = element_text(angle = 60, vjust = 0.5,color = "#000000", size = 11),
+        axis.text.y = element_text(color = "#000000", size = 11),
         strip.text.y = element_text(size = 10, colour = '#FFFFFF', face = 'bold'),
         strip.background = element_rect(fill = '#17408B', colour = 'white'),
         plot.title = element_text(size = 17.5, face = 'bold'))
@@ -294,8 +385,8 @@ p1 <- Team_shooting %>% filter(distance != 'Back Court Shot') %>% select(distanc
   #ylim(0,1500) +
   ggtitle('Field Goals Attempt by Distance') +
   theme_minimal() +
-    theme(axis.text.x = element_text(angle = 45, vjust = 0.5,color = "#000000", size = 10), 
-          axis.text.y = element_text(color = "#000000", size = 10),
+    theme(axis.text.x = element_text(angle = 45, vjust = 0.5,color = "#000000", size = 11), 
+          axis.text.y = element_text(color = "#000000", size = 11),
           legend.position = 'none',
           strip.text.y = element_text(size = 10, colour = '#FFFFFF', face = 'bold'),
           strip.background = element_rect(fill = '#17408B', colour = 'white'),
@@ -312,8 +403,8 @@ p2 <- Team_shooting %>% filter(distance != 'Back Court Shot') %>% select(distanc
   ylab('') +
   ggtitle('Field Goals Percentage by Distance') +
   theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, vjust = 0.5,color = "#000000", size = 10), 
-        axis.text.y = element_text(color = "#000000", size = 10),
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5,color = "#000000", size = 11), 
+        axis.text.y = element_text(color = "#000000", size = 11),
         legend.position = 'none',
         strip.text.y = element_text(size = 10, colour = '#FFFFFF', face = 'bold'),
         strip.background = element_rect(fill = '#17408B', colour = 'white'),
@@ -341,8 +432,8 @@ Team_splits %>% select(year, pctTS, pctWins) %>% group_by(year) %>%
   xlab('') +
   ylab('') +
   theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, vjust = 0.5,color = "#000000", size = 10),
-        axis.text.y = element_text(color = "#000000", size = 10),
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5,color = "#000000", size = 11),
+        axis.text.y = element_text(color = "#000000", size = 11),
         plot.title = element_text(size = 17.5, face = 'bold'),
         legend.position = 'none') 
 ```
@@ -366,8 +457,8 @@ Team_splits %>% select(year, ast, tov) %>% group_by(year) %>% summarise_all(mean
   xlab('') +
   ylab('') +
   theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, vjust = 0.5,color = "#000000", size = 10), 
-        axis.text.y = element_text(color = "#000000", size = 10),
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5,color = "#000000", size = 11), 
+        axis.text.y = element_text(color = "#000000", size = 11),
         legend.position = 'none',
         strip.text.y = element_text(size = 10, colour = '#FFFFFF', face = 'bold'),
         strip.background = element_rect(fill = '#17408B', colour = 'white'),
@@ -388,8 +479,8 @@ Team_splits %>% select(year, ratioAST, pctWins) %>% group_by(year) %>%
   xlab('') +
   ylab('') +
   theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, vjust = 0.5,color = "#000000", size = 10), 
-        axis.text.y = element_text(color = "#000000", size = 10),
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5,color = "#000000", size = 11), 
+        axis.text.y = element_text(color = "#000000", size = 11),
         legend.position = 'none',
         plot.title = element_text(size = 17.5, face = 'bold'))
 ```
@@ -397,38 +488,7 @@ Team_splits %>% select(year, ratioAST, pctWins) %>% group_by(year) %>%
 Assist Ratio is the percentage of a team's possessions that ends in an assist. The growth is obvious in recent three years and we can see there are teams pretty good at sharing balls these years and they all recieve outstanding grades.
 
 
-### Height/Weight Ratio
-```{r fig.align="center"}
-data <- Players_bio%>%
-  filter(Year>=2004)%>%
-  select(Player,height,weight,Year)%>%
-  distinct()%>%
-  drop_na()%>%
-  as.data.frame(stringsAsFactors = F)%>%
-  select(height,weight,Year)%>%
-  dplyr::group_by(Year)%>%
-  dplyr::summarise(avg_h=mean(height),avg_w=mean(weight))%>%
-  dplyr::ungroup()%>%
-  mutate(hw_ratio=avg_h/avg_w)%>%
-  select(Year,hw_ratio)
-
-
-ggplot()+
-  geom_line(aes(x=Year,y=hw_ratio),data=data,color="#C9082A",size=2)+
-  geom_point(aes(x=Year,y=hw_ratio),data=data,color="#C9082A",size=4)+
-  geom_point(aes(x=Year,y=hw_ratio),data=data,color="white",size=2)+
-  scale_x_continuous(breaks=seq(2004,2019))+
-  scale_y_continuous(labels = scales::percent_format(accuracy = 1))+
-  xlab('') +
-  ylab('') +
-  theme_minimal()+
-  ggtitle("Average Height/Weight Ratio Per Season")+
-  theme(plot.title = element_text(size=17.5,face="bold"),
-        axis.text.x = element_text(angle = 45, hjust = 1,color = "#000000", size = 10),
-        axis.text.y = element_text(color = "#000000", size = 10))
-```
-
-
+<br><br>
 
 ## VI. Interactive Plot
 ***
