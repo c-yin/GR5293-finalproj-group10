@@ -178,7 +178,7 @@ Also, we can see that there are quite some rows missing _3PA_ values, _FT_ value
 
 ### Overall Offensive Performance
 
-```{r}
+```{r fig.align="center"}
 Team_splits %>% select(year, pts, pace) %>% group_by(year) %>% summarise(Pace = mean(pace), Points = mean(pts)) %>%
   gather(key = 'type', value = 'value', -year) %>%
   ggplot(aes(x = year, y = value)) +
@@ -192,7 +192,8 @@ Team_splits %>% select(year, pts, pace) %>% group_by(year) %>% summarise(Pace = 
   ylab('') +
   ggtitle('Pace and Points Per Game') +
   theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, vjust = 0.5), 
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5,color = "#000000", size = 10), 
+        axis.text.y = element_text(color = "#000000", size = 10), 
         strip.text.y = element_text(size = 10, colour = '#FFFFFF', face = 'bold'),
         strip.background = element_rect(fill = '#17408B', colour = 'white'),
         plot.title = element_text(size = 17.5, face = 'bold'),
@@ -202,7 +203,7 @@ Team_splits %>% select(year, pts, pace) %>% group_by(year) %>% summarise(Pace = 
 
 There 's an obvious trend in both **Pace** (the number of possessions a team uses per game) and **PPG** (Points Per Game) of NBA games in recent 15 years. We can see that from 2004 to 2013 the pace and PPG are fluctuating around 93 and 98 respectively, but from 2014 these two stats keep growing and especially in 2019 the pace rise to 101 from 98 last year and PPG increases by nearly 6 points more than last season. It's easy to find a positive associaiton between pace and PPG since the more possessions you have the more chances you can score.
 
-```{r, message=FALSE}
+```{r, message=FALSE,fig.align="center"}
 Team_splits %>% select(year, ortg, pctWins) %>% group_by(year) %>%
   ggplot(aes(x = year, y=ortg, alpha = pctWins, color = 1-pctWins)) +
   geom_jitter(size = 2) +
@@ -212,7 +213,8 @@ Team_splits %>% select(year, ortg, pctWins) %>% group_by(year) %>%
   xlab('') +
   ylab('') +
   theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, vjust = 0.5),
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5,color = "#000000", size = 10),
+        axis.text.y = element_text(color = "#000000", size = 10),
         plot.title = element_text(size = 17.5, face = 'bold'),
         legend.position = 'none') 
 ```
@@ -221,7 +223,7 @@ This plot shows average **offrtg** (offensive rating, a statistic used to measur
 
 ### Scoring 
 
-```{r, fig.width=15, fig.height=5}
+```{r, fig.width=15, fig.height=5,fig.align="center"}
 p1 <- Team_splits %>% select(year, fg3a, fg2a) %>%
   gather(key = 'type', value = 'attempt', -c(year)) %>%
   group_by(year, type) %>% summarise(attempt = mean(attempt)) %>%
@@ -237,7 +239,8 @@ p1 <- Team_splits %>% select(year, fg3a, fg2a) %>%
   #ylim(0, 2500) +
   ggtitle('Field Goals Attempt') +
   theme_minimal() +
-  theme(axis.text.x = element_text(angle = 60, vjust = 0.5),
+  theme(axis.text.x = element_text(angle = 60, vjust = 0.5,color = "#000000", size = 10),
+        axis.text.y = element_text(color = "#000000", size = 10),
         strip.text.y = element_text(size = 10, colour = '#FFFFFF', face = 'bold'),
         strip.background = element_rect(fill = '#17408B', colour = 'white'),
         plot.title = element_text(size = 17.5, face = 'bold'),
@@ -256,7 +259,8 @@ p2 <- Team_splits %>% select(year, pctFG3, pctFG2) %>%
   ylab('') +
   ggtitle('Field Goals Percentage') +
   theme_minimal() + 
-  theme(axis.text.x = element_text(angle = 60, vjust = 0.5),
+  theme(axis.text.x = element_text(angle = 60, vjust = 0.5,color = "#000000", size = 10),
+        axis.text.y = element_text(color = "#000000", size = 10),
         strip.text.y = element_text(size = 10, colour = '#FFFFFF', face = 'bold'),
         strip.background = element_rect(fill = '#17408B', colour = 'white'),
         plot.title = element_text(size = 17.5, face = 'bold'))
@@ -274,7 +278,7 @@ The right plot tells the FG% of 2 pointer and 3 pointer from 2004 to 2019. It's 
 
 From these two plots, we can see that the strategy of NBA teams to score more is to try more 3 pointers and keep 2 pointers shots more efficient.
 
-```{r, fig.width=15, fig.height=10}
+```{r, fig.width=15, fig.height=10,fig.align="center"}
 Team_shooting$distance <- factor(Team_shooting$distance, levels = unique(Team_shooting$distance))
 
 p1 <- Team_shooting %>% filter(distance != 'Back Court Shot') %>% select(distance, fga, year) %>% group_by(year, distance) %>% summarise_all(mean) %>%
@@ -288,7 +292,8 @@ p1 <- Team_shooting %>% filter(distance != 'Back Court Shot') %>% select(distanc
   #ylim(0,1500) +
   ggtitle('Field Goals Attempt by Distance') +
   theme_minimal() +
-    theme(axis.text.x = element_text(angle = 45, vjust = 0.5), 
+    theme(axis.text.x = element_text(angle = 45, vjust = 0.5,color = "#000000", size = 10), 
+          axis.text.y = element_text(color = "#000000", size = 10),
           legend.position = 'none',
           strip.text.y = element_text(size = 10, colour = '#FFFFFF', face = 'bold'),
           strip.background = element_rect(fill = '#17408B', colour = 'white'),
@@ -305,7 +310,8 @@ p2 <- Team_shooting %>% filter(distance != 'Back Court Shot') %>% select(distanc
   ylab('') +
   ggtitle('Field Goals Percentage by Distance') +
   theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, vjust = 0.5), 
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5,color = "#000000", size = 10), 
+        axis.text.y = element_text(color = "#000000", size = 10),
         legend.position = 'none',
         strip.text.y = element_text(size = 10, colour = '#FFFFFF', face = 'bold'),
         strip.background = element_rect(fill = '#17408B', colour = 'white'),
@@ -322,7 +328,7 @@ This plot shows FGA and FG% of shots from different region on the court. The dis
 
 This may explain how the NBA teams makes it to keeping throwing more 3 pointers and in the meanwhile raise the FG% of 2 pointers. They decrease the attempts to shoot from 'low efficence' regions and focus more near the basket.
 
-```{r, message=FALSE}
+```{r, message=FALSE,fig.align="center"}
 Team_splits %>% select(year, pctTS, pctWins) %>% group_by(year) %>%
   ggplot(aes(x = year, y=pctTS, alpha = pctWins, color = 1-pctWins)) +
   geom_jitter(size = 2) +
@@ -333,7 +339,8 @@ Team_splits %>% select(year, pctTS, pctWins) %>% group_by(year) %>%
   xlab('') +
   ylab('') +
   theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, vjust = 0.5),
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5,color = "#000000", size = 10),
+        axis.text.y = element_text(color = "#000000", size = 10),
         plot.title = element_text(size = 17.5, face = 'bold'),
         legend.position = 'none') 
 ```
@@ -344,7 +351,7 @@ Team_splits %>% select(year, pctTS, pctWins) %>% group_by(year) %>%
 
 Basketball teamwork is in fact very important as it allows the team to function together and not individually. During offensive situations, teamwork is vital because you need to confuse the defense on who will take the shot or where the shot will come from.  If there is only one person making the shot for the team, then the defense will mostly concentrate their efforts in putting a stop to their scorer.
 
-```{r}
+```{r fig.align="center"}
 Team_splits %>% select(year, ast, tov) %>% group_by(year) %>% summarise_all(mean) %>%
   gather(key = 'type', value = 'value', -year) %>%
   ggplot(aes(x = year, y=value)) +
@@ -357,7 +364,8 @@ Team_splits %>% select(year, ast, tov) %>% group_by(year) %>% summarise_all(mean
   xlab('') +
   ylab('') +
   theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, vjust = 0.5), 
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5,color = "#000000", size = 10), 
+        axis.text.y = element_text(color = "#000000", size = 10),
         legend.position = 'none',
         strip.text.y = element_text(size = 10, colour = '#FFFFFF', face = 'bold'),
         strip.background = element_rect(fill = '#17408B', colour = 'white'),
@@ -368,7 +376,7 @@ Team_splits %>% select(year, ast, tov) %>% group_by(year) %>% summarise_all(mean
 
 In this plot, we can see that the assit rising dramaticly in 2013 and since then it keeps growing. While turnover first rises until 2014 and starts drop till now. It's likely that in 2013 and 2014 teams started to speed up and encourage passing while players didn't get used to this style and s lot of passes turns into turnover. From 2015, teams began to figure out how to pass the ball right to the scorer and reduce bad passes.
 
-```{r, message=FALSE}
+```{r, message=FALSE,fig.align="center"}
 Team_splits %>% select(year, ratioAST, pctWins) %>% group_by(year) %>%
   ggplot(aes(x = year, y=ratioAST, alpha = pctWins, color = 1-pctWins)) +
   geom_jitter(size = 2) +
@@ -378,7 +386,8 @@ Team_splits %>% select(year, ratioAST, pctWins) %>% group_by(year) %>%
   xlab('') +
   ylab('') +
   theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, vjust = 0.5), 
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5,color = "#000000", size = 10), 
+        axis.text.y = element_text(color = "#000000", size = 10),
         legend.position = 'none',
         plot.title = element_text(size = 17.5, face = 'bold'))
 ```
