@@ -1,0 +1,309 @@
+---
+title: "NBA's 15 Years"
+author: "Chao Yin"
+date: "4/14/2019"
+output: 
+  html_document:
+    code_folding: hide
+---
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+library(tidyverse)
+library(gridExtra)
+library(plotly)
+```
+
+## Introduction
+
+## Data source
+
+### Collection
+
+Chao Yin is mainy responible for collection of team/player game stats data while Zeyu Yang is responsible for players' biographical and salaries information.
+
+Our data is collected from [Basketball-Reference](https://www.basketball-reference.com/) and [Stats NBA](https://stats.nba.com/). 
+
+* *Basketball Reference* is a site providing both basic and sabermetric statistics and resources for basketball fans using offical NBA data. 
+
+* *Stats NBA* is the home of NBA Advanced Stats and provides  official NBA Statistics and advanced analytics. 
+
+Data in Basketball-Reference is stored in XML so that we can directly extract them using packages `XML` and `RCurl`. However, some tables on this site are commented and they can only be downloaded manually in csv form thus we choose Stats NBA for other data. It's a bit harder to extract data tables from Stats NBA than from Basketball-Reference since they are stored in json files. We use `statsnbaR` which provides utility functions to download data from the API end-points of Stats NBA. We got `teams` from Basketball -Reference and `players` from Stats NBA.
+
+### Datasets and variables
+
+`players` datasets contains all regular season information of all players in one season. 
+
+General data provides basic players' performance including:
+
+* Profile information like Name, Team, Age, Game Played, Minutes Played, etc.
+
+* Shooting performance from 2 pointer, 3 pointer and free throw like Field Goalds Made, Field Goals Attempted, Field Goal Percentage, etc.
+
+* Basic stats per game like Rebounds, Assists, Steals, Blocks, Points, Turnovers, Personal Fouls, etc.
+
+Advanced data measures and analysis player's ability in one percific area :
+
+* Overall ratings like Offensive Rating, Defensive Rating, Net Rating, Player Impact Estimate, Usage Percentage, etc.
+
+* Passing/Assist ability like Assist Percentage, Assist to Turnover Ratio, Assist Ratio
+
+* Rebound ability like Offensive Rebound Percentage, Defensive Rebound Percentage, Rebound Percentage
+
+* Shooting ability like Effective Field Goal Percentage, True Shooting Percentage
+
+`teams` datasets contains similar information as shown in the `players` but corresponds to each team in the league. However, `teams` provides ways to split the data in order to measure the teams' performance from different angles:
+
+* *Location* helps measure teams' gaming performance at home or on the road respectively
+
+* *Wins-Losses* tells how the team played when they won or losed the game
+
+* *Month* and *Pre/Post All Stars* give teams' performance changes over time periods
+
+* *Days Rest* tests teams abilities to handle tough schedules 
+
+### Issues/Problems
+
+Teams in NBA keep changing in these 15 years. Three teams change their team locations and team names thus we may find the teams are not necessarily the same each year. Players can be traded and signed during the season, which makes some players have more records than others in these datasets.
+
+Also all data are saved as factor, which requires me convert them to numeric or character.
+
+## Data cleaning
+
+```{r, echo=FALSE}
+load('data/tidy/Player.RData')
+load('data/tidy/Team_splits.RData')
+load('data/tidy/Team_shooting.RData')
+```
+
+After we got all the raw data in **data/raw**, we wanted to combine them into three datasets: `Team_splits`, `Team_shoots`, `Player`.
+
+For the players' data, we first remove empty rows and columns and turn the variables into numerics and characters according to their content. Considering more and more players can play more than one position today, we group the players into three kinds: Guards, Wings and Bigs instead of the origin positions they play. And finally we combind players data of all 15 years and got `Player`.
+
+```{r}
+str(Player)
+```
+
+For teams' data, we split them into two datasets `Team_split` and `Team_shooting`.
+
+`Teams_splits` contains all the 'per game' stats for each 30 team every season. We choose 'Location' filter because all the teams have to play 41 Home game and 41 Road games every year and we simply calculate the mean to get seasonal average stats. We changed the format, removed the ranking variables, combined the basic with advanced data, and put all 15 years data into this one dataset.
+
+```{r}
+str(Team_splits)
+```
+
+`Team_shooting` contains all the shooting performance of each team from different regions on the court. We cleaned them the same way as `Team_splits`
+
+```{r}
+str(Team_shooting)
+```
+
+## Results
+
+### Overall Offensive Performance
+
+```{r}
+Team_splits %>% select(year, pts, pace) %>% group_by(year) %>% summarise(Pace = mean(pace), Points = mean(pts)) %>%
+  gather(key = 'type', value = 'value', -year) %>%
+  ggplot(aes(x = year, y = value)) +
+  geom_line(color = '#C9082A', size = 2) +
+  geom_point(color = '#C9082A', size = 4) +
+  geom_point(color = '#FFFFFF', size = 2) +
+  #scale_color_manual(values = c('#17408B', '#C9082A')) +
+  facet_grid(type ~ ., scales = 'free_y') +
+  scale_x_continuous(labels = unique(Team_splits$year), breaks = unique(Team_splits$year)) +
+  xlab('') +
+  ylab('') +
+  ggtitle('Pace and Points Per Game') +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5), 
+        strip.text.y = element_text(size = 10, colour = '#FFFFFF', face = 'bold'),
+        strip.background = element_rect(fill = '#17408B', colour = 'white'),
+        plot.title = element_text(size = 17.5, face = 'bold'),
+        legend.position = 'none')
+```
+
+
+There 's an obvious trend in both **Pace** (the number of possessions a team uses per game) and **PPG** (Points Per Game) of NBA games in recent 15 years. We can see that from 2004 to 2013 the pace and PPG are fluctuating around 93 and 98 respectively, but from 2014 these two stats keep growing and especially in 2019 the pace rise to 101 from 98 last year and PPG increases by nearly 6 points more than last season. It's easy to find a positive associaiton between pace and PPG since the more possessions you have the more chances you can score.
+
+```{r, message=FALSE}
+Team_splits %>% select(year, ortg, pctWins) %>% group_by(year) %>%
+  ggplot(aes(x = year, y=ortg, alpha = pctWins, color = 1-pctWins)) +
+  geom_jitter(size = 2) +
+  geom_smooth(linetype = 'longdash', colour = '#C9082A', se = FALSE, size = 2) +
+  scale_x_continuous(labels = unique(Team_splits$year), breaks = unique(Team_splits$year)) +
+  ggtitle('Average Offensive Rating Per Game') +
+  xlab('') +
+  ylab('') +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5),
+        plot.title = element_text(size = 17.5, face = 'bold'),
+        legend.position = 'none') 
+```
+
+This plot shows average **offrtg** (offensive rating, a statistic used to measure a team's offensive performance) of each teams in these 15 years. The color reflects the Win Percentage of each team. The darker the marker is, the more the team wins. Offensive Rating shows that the offensive ability of each team started growing from 2013 and reached an unprecedented level in 2018. We are curious about is there any other reasons for such high offensive performance these years except the high pace?
+
+### Scoring 
+
+```{r, fig.width=15, fig.height=5}
+p1 <- Team_splits %>% select(year, fg3a, fg2a) %>%
+  gather(key = 'type', value = 'attempt', -c(year)) %>%
+  group_by(year, type) %>% summarise(attempt = mean(attempt)) %>%
+  ggplot(aes(x = year, y = attempt, group = year)) +
+  #geom_boxplot(aes(color = type)) +
+  #geom_line() +
+  geom_bar(stat = 'identity', fill = '#C9082A') +
+  facet_grid(type ~., scales = 'free_y', labeller = as_labeller(c(`fg2a` = '2 pointer', `fg3a` = '3 pointer'))) +
+  scale_color_manual(values = c('#17408B', '#C9082A')) +
+  scale_x_continuous(labels = unique(Team_splits$year), breaks = unique(Team_splits$year)) +
+  xlab('') +
+  ylab('') +
+  #ylim(0, 2500) +
+  ggtitle('Field Goals Attempt') +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 60, vjust = 0.5),
+        strip.text.y = element_text(size = 10, colour = '#FFFFFF', face = 'bold'),
+        strip.background = element_rect(fill = '#17408B', colour = 'white'),
+        plot.title = element_text(size = 17.5, face = 'bold'),
+        legend.position = 'none') 
+
+p2 <- Team_splits %>% select(year, pctFG3, pctFG2) %>% 
+  gather(key = 'type', value = 'percentage', -c(year)) %>%
+  group_by(year, type) %>% summarise(percentage = mean(percentage)) %>%
+  ggplot(aes(x = year, y = percentage)) +
+  geom_line(color = '#C9082A', size = 2) +
+  geom_point(color = '#C9082A', size = 4) +
+  geom_point(color = '#FFFFFF', size = 2) +
+  facet_grid(type ~., scales = 'free_y', labeller = as_labeller(c(`pctFG2` = '2 pointer', `pctFG3` = '3 pointer'))) +
+  scale_x_continuous(labels = unique(Team_splits$year), breaks = unique(Team_splits$year)) +
+  xlab('') +
+  ylab('') +
+  ggtitle('Field Goals Percentage') +
+  theme_minimal() + 
+  theme(axis.text.x = element_text(angle = 60, vjust = 0.5),
+        strip.text.y = element_text(size = 10, colour = '#FFFFFF', face = 'bold'),
+        strip.background = element_rect(fill = '#17408B', colour = 'white'),
+        plot.title = element_text(size = 17.5, face = 'bold'))
+
+grid.arrange(p1, p2, ncol = 2)
+```
+
+In basketball, a **field goal** is a basket scored on any shot or tap other than a free throw, worth two or three points depending on the distance of the attempt from the basket.
+
+This plot shows the **FGA** (Field Goal Attempt) and **FG%** (Field Goal Percentage) for both 2 pointer and 3 pointer of the league average performance. 
+
+In the left plot, we find that teams in NBA is attempting more and more 3 pointers year by year without decreasing too much 2 pointer attempts. In 2019, FGA for 3 is more than twice of that 15 years ago. Also in 2019, FGA for 3 is beyond 30 and FGA for 2 is below 60, which means in average every three shots in a NBA game ther is one 3 pointer shot in 2019. 
+
+The right plot tells the FG% of 2 pointer and 3 pointer from 2004 to 2019. It's clear that the FG% for 2 keeps growing from 2012 and reached beyond 50% since 2017. The FG% for 3 is fluctuating between 35% and 36% in most years. We can see that teams are trying to make 2 pointers shots more efficient by increasing the FG% of it.
+
+From these two plots, we can see that the strategy of NBA teams to score more is to try more 3 pointers and keep 2 pointers shots more efficient.
+
+```{r, fig.width=15, fig.height=10}
+Team_shooting$distance <- factor(Team_shooting$distance, levels = unique(Team_shooting$distance))
+
+p1 <- Team_shooting %>% filter(distance != 'Back Court Shot') %>% select(distance, fga, year) %>% group_by(year, distance) %>% summarise_all(mean) %>%
+  ggplot(aes(x = year, y = fga/82, group = year)) +
+  #geom_boxplot() +
+  geom_bar(stat = 'identity', fill = '#C9082A') +
+  facet_grid(distance ~ ., scales = 'free_y') +
+  scale_x_continuous(labels = unique(Team_splits$year), breaks = unique(Team_splits$year)) +
+  xlab('') +
+  ylab('') +
+  #ylim(0,1500) +
+  ggtitle('Field Goals Attempt by Distance') +
+  theme_minimal() +
+    theme(axis.text.x = element_text(angle = 45, vjust = 0.5), 
+          legend.position = 'none',
+          strip.text.y = element_text(size = 10, colour = '#FFFFFF', face = 'bold'),
+          strip.background = element_rect(fill = '#17408B', colour = 'white'),
+          plot.title = element_text(size = 17.5, face = 'bold'))
+
+p2 <- Team_shooting %>% filter(distance != 'Back Court Shot') %>% select(distance, pctFG, year) %>% group_by(year, distance) %>% summarise_all(mean) %>%
+  ggplot(aes(x = year, y = pctFG)) +
+  geom_line(color = '#C9082A', size = 2) +
+  geom_point(color = '#C9082A', size = 4) +
+  geom_point(color = '#FFFFFF', size = 2) +
+  facet_grid(distance ~ ., scales = 'free_y') +
+  scale_x_continuous(labels = unique(Team_splits$year), breaks = unique(Team_splits$year)) +
+  xlab('') +
+  ylab('') +
+  ggtitle('Field Goals Percentage by Distance') +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5), 
+        legend.position = 'none',
+        strip.text.y = element_text(size = 10, colour = '#FFFFFF', face = 'bold'),
+        strip.background = element_rect(fill = '#17408B', colour = 'white'),
+        plot.title = element_text(size = 17.5, face = 'bold'))
+
+grid.arrange(p1, p2, ncol = 2)
+```
+
+This plot shows FGA and FG% of shots from different region on the court. The distance is how far the shooting spot is from the basket. Shots beyond 23 feet 9 inches from the basket is 3 pointers and others are 2 pointers. The 24+ ft data are similar with that of the 3 pointer in the plot above.
+
+ This plot decompose 2 pointer shots into 3 types -- 'near basket', 'mid-range', 'long-range'. 
+ 
+ We can see from the left plot that 'near basket' 2 pointers' FGA is the most among all and it reaches 30 in 2019 which is even more than the sum of other two types. While 'long-range' shots keeps going down and 'mid-range' remains around 12. Considering the difficulty of making a field goal rises with the distance from the basket, 'long-range' shots seems to be less valuable than 'near basket' ones. In the right plot, we can see 'near basket' shots' FG% goes far beyond others and reached 58% in 2019 while 'mid-range' shots' FG% also keeps rising.
+
+This may explain how the NBA teams makes it to keeping throwing more 3 pointers and in the meanwhile raise the FG% of 2 pointers. They decrease the attempts to shoot from 'low efficence' regions and focus more near the basket.
+
+```{r, message=FALSE}
+Team_splits %>% select(year, pctTS, pctWins) %>% group_by(year) %>%
+  ggplot(aes(x = year, y=pctTS, alpha = pctWins, color = 1-pctWins)) +
+  geom_jitter(size = 2) +
+  geom_smooth(linetype = 'longdash', colour = '#C9082A', se = FALSE, size = 2) +
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5), legend.position = 'none') +
+  scale_x_continuous(labels = unique(Team_splits$year), breaks = unique(Team_splits$year)) +
+  ggtitle('Average True Shooting Percentage Per Game') +
+  xlab('') +
+  ylab('') +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5),
+        plot.title = element_text(size = 17.5, face = 'bold'),
+        legend.position = 'none') 
+```
+
+**TS%** (True Shooting Percentage, measures efficiency at shooting the ball) synthesizes field goal percentage, free throw percentage, and three-point field goal percentage instead of take them individually to calculate shooting more accurately. The same as before, the darker the marker is, the more the team wins. It's easy to find that the curve of TS% shares the simialr shape of that of offrtg curve and teams at present shoots much more efficiently than 15 years ago.
+
+### Sharing the ball
+
+Basketball teamwork is in fact very important as it allows the team to function together and not individually. During offensive situations, teamwork is vital because you need to confuse the defense on who will take the shot or where the shot will come from.  If there is only one person making the shot for the team, then the defense will mostly concentrate their efforts in putting a stop to their scorer.
+
+```{r}
+Team_splits %>% select(year, ast, tov) %>% group_by(year) %>% summarise_all(mean) %>%
+  gather(key = 'type', value = 'value', -year) %>%
+  ggplot(aes(x = year, y=value)) +
+  geom_line(color = '#C9082A', size = 2) +
+  geom_point(color = '#C9082A', size = 4) +
+  geom_point(color = '#FFFFFF', size = 2) +
+  scale_x_continuous(labels = unique(Team_splits$year), breaks = unique(Team_splits$year)) +
+  ggtitle('Average Assists Per Game') +
+  facet_grid(type ~ ., scales = 'free_y') +
+  xlab('') +
+  ylab('') +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5), 
+        legend.position = 'none',
+        strip.text.y = element_text(size = 10, colour = '#FFFFFF', face = 'bold'),
+        strip.background = element_rect(fill = '#17408B', colour = 'white'),
+        plot.title = element_text(size = 17.5, face = 'bold'))
+```
+
+**Ast** (Assist, attributed to a player who passes the ball to a teammate in a way that leads to a score by field goal) roughly measures the willingness and ability of a team to share the ball and **tov** (Turnover, occurs when a team loses possession of the ball to the opposing team before a player takes a shot at their team's basket) give a angle to view how disciplined the team is.
+
+In this plot, we can see that the assit rising dramaticly in 2013 and since then it keeps growing. While turnover first rises until 2014 and starts drop till now. It's likely that in 2013 and 2014 teams started to speed up and encourage passing while players didn't get used to this style and s lot of passes turns into turnover. From 2015, teams began to figure out how to pass the ball right to the scorer and reduce bad passes.
+
+```{r, message=FALSE}
+Team_splits %>% select(year, ratioAST, pctWins) %>% group_by(year) %>%
+  ggplot(aes(x = year, y=ratioAST, alpha = pctWins, color = 1-pctWins)) +
+  geom_jitter(size = 2) +
+  geom_smooth(linetype = 'longdash', colour = '#C9082A', se = FALSE, size = 2) +
+  scale_x_continuous(labels = unique(Team_splits$year), breaks = unique(Team_splits$year)) +
+  ggtitle('Assist Ratio Per Game') +
+  xlab('') +
+  ylab('') +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5), 
+        legend.position = 'none',
+        plot.title = element_text(size = 17.5, face = 'bold'))
+```
+
+Assist Ratio is the percentage of a team's possessions that ends in an assist. The growth is obvious in recent three years and we can see there are teams pretty good at sharing balls these years and they all recieve outstanding grades.
