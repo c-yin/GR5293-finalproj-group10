@@ -7,6 +7,9 @@ output:
     toc: true
     theme: lumen
     css: style.css
+    includes: 
+      before_body: header.html
+      after_body: footer.html
 ---
 
 ```{r message=FALSE, warning=FALSE, echo=FALSE}
@@ -123,7 +126,6 @@ After we got all the raw data in **data/raw**, we wanted to combine them into fo
 For the players' data, we first remove empty rows and columns and turn the variables into numerics and characters according to their content. Considering more and more players can play more than one position today, we group the players into three kinds: Guards, Wings and Bigs instead of the origin positions they play. And finally we combind players data of all 15 years and got `Player`.
 
 _Scroll down the table to see more details_
-
 ```{r warning=FALSE,message=FALSE}
 print(dfSummary(Player,headings = FALSE,plain.ascii = FALSE,valid.col = FALSE,graph.magnif = 0.75,style = "grid"),max.tbl.height = 500,method='render')
 ```
@@ -158,9 +160,18 @@ print(dfSummary(Team_shooting,headings = FALSE,plain.ascii = FALSE,valid.col = F
 ## IV. Missing values
 ***
 
+As we can see in the aforementioned tables, there is no missing value in `Teams_splits` and `Team_shooting`. Also, since `Player` and `Players_bio` are similar to each other, we are going to display the missing values of `Players_bio` here.
 
+```{r fig.align="center",fig.cap="Figure 1: Missing values"}
+visna(players_bio)
+```
+Figure 1 shows that the marjority of the data has no missing values.
 
-<br><br><br><br>
+Those lines that have missed _yearstart_ variable also missed all the following variables. This is because these columns come from another table: bio. Although the bio table itself has no missing values, it does not contain all the players as `Player` data has.
+
+Also, we can see that there are quite some rows missing _3PA_ values. This _3PA_ refers to the total 3 points filed goal
+
+<br><br>
 
 ## V. Results
 ***
