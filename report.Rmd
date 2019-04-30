@@ -352,7 +352,8 @@ _* The formula for pace is: ((Tm Poss + Opp Poss) / (2 x (Tm MP / 5))). The firs
 Team_splits %>% select(year, ortg, pctWins) %>% group_by(year) %>%
   ggplot(aes(x = year, y=ortg, alpha = pctWins, color = pctWins)) +
   geom_jitter(size = 2) +
-  scale_colour_gradient(low = "#8ec5ff", high = "#19293a")+
+  scale_colour_gradient(low = "#8ec5ff", high = "#19293a",breaks
+=c(0.2,0.4,0.6,0.8), labels=c("20%","40%","60%","80%"))+
   geom_smooth(linetype = 'longdash', colour = '#C9082A', se = FALSE, size = 2, show.legend = F) +
   scale_x_continuous(labels = unique(Team_splits$year), breaks = unique(Team_splits$year)) +
   guides(alpha=FALSE)+
@@ -487,7 +488,8 @@ __This may explain how the NBA teams makes it to keeping throwing more 3 pointer
 Team_splits %>% select(year, pctTS, pctWins) %>% group_by(year) %>%
   ggplot(aes(x = year, y=pctTS, alpha = pctWins, color = pctWins)) +
   geom_jitter(size = 2) +
-  scale_colour_gradient(low = "#8ec5ff", high = "#19293a")+
+  scale_colour_gradient(low = "#8ec5ff", high = "#19293a",breaks
+=c(0.2,0.4,0.6,0.8), labels=c("20%","40%","60%","80%"))+
   geom_smooth(linetype = 'longdash', colour = '#C9082A', se = FALSE, size = 2, show.legend = F) +
   theme(axis.text.x = element_text(angle = 45, vjust = 0.5), legend.position = 'none') +
   scale_x_continuous(labels = unique(Team_splits$year), breaks = unique(Team_splits$year)) +
@@ -542,7 +544,8 @@ In this plot, we can see that the assit rising dramaticly in 2013 and since then
 Team_splits %>% select(year, ratioAST, pctWins) %>% group_by(year) %>%
   ggplot(aes(x = year, y=ratioAST/100, alpha = pctWins, color = pctWins)) +
   geom_jitter(size = 2) +
-  scale_colour_gradient(low = "#8ec5ff", high = "#19293a")+
+  scale_colour_gradient(low = "#8ec5ff", high = "#19293a",breaks
+=c(0.2,0.4,0.6,0.8), labels=c("20%","40%","60%","80%"))+
   geom_smooth(linetype = 'longdash', colour = '#C9082A', se = FALSE, size = 2, show.legend = F) +
   scale_x_continuous(labels = unique(Team_splits$year), breaks = unique(Team_splits$year)) +
   scale_y_continuous(labels = scales::percent_format(accuracy = 1))+
