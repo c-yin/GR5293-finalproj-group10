@@ -20,7 +20,7 @@ In this report, we are going to use data to find out how NBA changes for the pas
 + Increasing of average height/weight ratio suggests players are becoming more and more facile and fast.
 + Pace and Points Per Game have the similar increasing trend. The increasement in Pace means a more active offense and have a higher chances of scoring.
 + The strategy of NBA teams to score more is to try more 3 pointers and keep 2 pointers shots more efficient.
-+ The NBA teams makes it to keeping throwing more 3 pointers and in the meanwhile raise the FG% of 2 pointers. They decrease the attempts to shoot from ‘low efficence’ regions and focus more near the basket.
++ The NBA teams makes it to keeping throwing more 3 pointers and in the meanwhile raise the FG% of 2 pointers. They decrease the attempts to shoot from ‘low efficiency’ regions and focus more near the basket.
 + Assit rising dramaticly since 2013 while turnover first rises until 2014 and starts drop till now. This may because in 2013 and 2014 teams started to speed up and encourage passing while players didn’t get used to this style and plenty passes turns into turnover. From 2015, teams began to figure out how to pass the ball right to the scorer and reduce bad passes.
 
 ## Notes:
