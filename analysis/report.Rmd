@@ -32,6 +32,13 @@ opts_chunk$set(comment = NA,prompt = FALSE,cache = FALSE,results = "asis")
 library(skimr)
 ```
 
+```{r echo=FALSE, out.width = '100%',fig.align="center"}
+knitr::include_graphics("../image/NBA_players_color-blast_drk.jpg")
+# Source: https://www.skinit.com/nba-all-star
+```
+
+
+
 ## I. Introduction
 ***
 
@@ -43,7 +50,7 @@ library(skimr)
 
 ### Collection
 
-_Chao Yin_ is mainy responible for collection of team/player game stats data while _Zeyu Yang_ is responsible for players' biographical and salaries information.
+_Chao Yin_ is mainy responible for collection of team/player game stats data while _Zeyu Yang_ is responsible for players' biographical information.
 
 Our data is collected from [Basketball-Reference](https://www.basketball-reference.com/), [Stats NBA](https://stats.nba.com/) and [Kaggle](https://www.kaggle.com/drgilermo/nba-players-stats).
 
@@ -92,7 +99,7 @@ Bio dataset contains players' biographical data:
 
 * College attended
 
-<br><br>
+<br>
 
 `teams` datasets contains similar information as shown in the `players` but corresponds to each team in the league. However, `teams` provides ways to split the data in order to measure the teams' performance from different angles:
 
@@ -128,7 +135,7 @@ After we got all the raw data in **data/raw**, we wanted to combine them into fo
 
 For the players' data, we first remove empty rows and columns and turn the variables into numerics and characters according to their content. Considering more and more players can play more than one position today, we group the players into three kinds: Guards, Wings and Bigs instead of the origin positions they play. And finally we combind players data of all 15 years and got `Player`.
 
-_Scroll down the table to see more details_
+_* Scroll down the table to see more details_
 ```{r warning=FALSE,message=FALSE}
 print(dfSummary(Player,
                 headings = FALSE,
@@ -143,7 +150,7 @@ print(dfSummary(Player,
 
 For `Players_bio` data, we join players' data and biographical data and turn the variables into numerics and characters according to their content. 
 
-_Scroll down the table to see more details_
+_* Scroll down the table to see more details_
 ```{r warning=FALSE,message=FALSE}
 print(dfSummary(Players_bio,
                 headings = FALSE,
@@ -162,7 +169,7 @@ For teams' data, we split them into two datasets `Team_split` and `Team_shooting
 
 `Teams_splits` contains all the 'per game' stats for each 30 team every season. We choose 'Location' filter because all the teams have to play 41 Home game and 41 Road games every year and we simply calculate the mean to get seasonal average stats. We changed the format, removed the ranking variables, combined the basic with advanced data, and put all 15 years data into this one dataset.
 
-_Scroll down the table to see more details_
+_* Scroll down the table to see more details_
 ```{r warning=FALSE,message=FALSE}
 print(dfSummary(Team_splits,
                 headings = FALSE,
@@ -177,7 +184,7 @@ print(dfSummary(Team_splits,
 
 `Team_shooting` contains all the shooting performance of each team from different regions on the court. We cleaned them the same way as `Team_splits`
 
-_Scroll down the table to see more details_
+_* Scroll down the table to see more details_
 ```{r warning=FALSE,message=FALSE}
 print(dfSummary(Team_shooting,
                 headings = FALSE,

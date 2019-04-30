@@ -5,11 +5,11 @@ body{
   margin-bottom: 20px;
 }
 /* Headers */
-h1{
+h1,h2{
   font-size: 24pt;
   margin-bottom: 10px;
 }
-h2,h3,h4,h5,h6{
+h3,h4,h5,h6{
   font-size: 20pt;
 }
 .st-multiline {
