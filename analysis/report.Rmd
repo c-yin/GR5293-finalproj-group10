@@ -42,9 +42,11 @@ knitr::include_graphics("../image/NBA_players_color-blast_drk.jpg")
 ## I. Introduction
 ***
 
-The National Basketball Association(NBA) is a men's professional basketball league in North America composed of 30 teams. Thanks to David Stern's(the fourth NBA Commissioner) great efforts, NBA turns into the sport of the modern world from an unknown commodity outside the United States. Beside its business modes and fame, NBA's games are going through great revolutions during last 15 years. ^[1](https://web.archive.org/web/20150630155528/http://www.usab.com/about/inside-usa-basketball/members.aspx)^ ^[2](https://en.wikipedia.org/wiki/National_Basketball_Association)^
+The National Basketball Association(NBA) is a men's professional basketball league in North America composed of 30 teams. With David Stern's(the fourth NBA Commissioner) great efforts, NBA turns into the sport of the modern world from an unknown commodity outside the United States. Beside its business modes and fame, NBA's games are going through great revolutions during last 15 years. ^[1](https://web.archive.org/web/20150630155528/http://www.usab.com/about/inside-usa-basketball/members.aspx)^ ^[2](https://en.wikipedia.org/wiki/National_Basketball_Association)^
 
 Today we are able to analyze the teams' and players' performance from different angles using their gaming data instead of simply watching video records, which provides us more ways to learn and enjoy the basketball games.
+
+In this report, we are going to use data to find out how NBA changes for the past 15 years. We are curious about how the overall stragety of teams changes as well as how players adapt to these changes.
 
 <br><br>
 
@@ -439,7 +441,7 @@ grid.arrange(p1, p2, ncol = 2)
 
 In basketball, a **field goal** is a basket scored on any shot or tap other than a free throw, worth two or three points depending on the distance of the attempt from the basket. An **attempt** is counted no matter this shot is scored.
 
-This plot shows the **FGA** (Field Goal Attempt) and **FG%** (Field Goal Percentage) for both 2 pointer and 3 pointer of the league average performance(per team per game). Please note that the FG% only relates to the scored shots -- the sum of 3 pointer FG% and 2 pointer FG% does not necessarily add up to 100%. 
+This plot shows the **FGA** (Field Goal Attempt) and **FG%** (Field Goal Percentage) for both 2 pointer and 3 pointer of the league average performance(per team per game). Please note that the FG% only relates to the scored shots -- they are the percentage of scored shots over all the attempts. The sum of 3 pointer FG% and 2 pointer FG% does not necessarily add up to 100%. 
 
 In the left plot, we find that teams in NBA is attempting more and more 3 pointers year by year without decreasing too much 2 pointer attempts. In 2019, FGA for 3 is more than twice of that 15 years ago. Also in 2019, FGA for 3 is beyond 30 and FGA for 2 is below 60, which means in average every three shots in a NBA game ther is one 3 pointer shot in 2019. 
 
@@ -554,7 +556,7 @@ Team_splits %>% select(year, ast, tov) %>% group_by(year) %>% summarise_all(mean
 
 **Ast** (Assist, attributed to a player who passes the ball to a teammate in a way that leads to a score by field goal) roughly measures the willingness and ability of a team to share the ball and **tov** (Turnover, occurs when a team loses possession of the ball to the opposing team before a player takes a shot at their team's basket) give a angle to view how disciplined the team is.
 
-In this plot, we can see that the assit rising dramaticly in 2013 and since then it keeps growing. While turnover first rises until 2014 and starts drop till now. It's likely that in 2013 and 2014 teams started to speed up and encourage passing while players didn't get used to this style and s lot of passes turns into turnover. From 2015, teams began to figure out how to pass the ball right to the scorer and reduce bad passes.
+In this plot, we can see that the assit rising dramaticly in 2013 and since then it keeps growing. While turnover first rises until 2014 and starts drop till now. It's likely that in 2013 and 2014 teams started to speed up and encourage passing while players didn't get used to this style and a lot of passes turns into turnover. From 2015, teams began to figure out how to pass the ball right to the scorer and reduce bad passes.
 
 ```{r, message=FALSE,fig.align="center"}
 Team_splits %>% select(year, ratioAST, pctWins) %>% group_by(year) %>%
@@ -621,8 +623,9 @@ knitr::include_graphics("../image/shinyapp_scoring_fieldGoalPercentage.png")
 
 The plot uses 3-pointer and 2-pointer FG% (Field Goal Percentage) as axises and total FGA as markers' size to demostrate scoring effieciency of teams in different seasons.
 
-We can see that 3-pointer filed goal percentage is around the same while the 2-pointer filed goal percentage is increasing. The strategy of NBA teams to score more is to try more 3 pointers and keep 2 pointers shots more efficient.
+We can see that 3-pointer field goal percentage is around the same while the 2-pointer field goal percentage is increasing. The strategy of NBA teams to score more is to keep 2 pointers shots more efficient.
 
+<br>
 
 #### 3-pointer Performance
 ```{r echo=FALSE, out.width = '80%',fig.align="center"}
@@ -631,7 +634,9 @@ knitr::include_graphics("../image/shinyapp_scoring_3PA.png")
 
 The plot uses 3-pointer and 3-pointer percentage as axises and total FGA as markers' size to demostrate three pointer performance of teams in different seasons.
 
+The 3-pointer field goal percentage is around 30% to 40%. The strategy of NBA teams to score more is to try more 3 pointers.
 
+<br>
 
 #### 2-pointer Performance
 ```{r echo=FALSE, out.width = '80%',fig.align="center"}
@@ -640,8 +645,9 @@ knitr::include_graphics("../image/shinyapp_scoring_2PA.png")
 
 The plot uses 2-pointer and 2 pointer percentage as axises and total FGA as markers' size to demostrate two pointer performance of teams in different seasons.
 
+The 2-pointer field goals are decreasing while the 2-pointer field goals are increasing.
 
-
+<br>
 
 #### True Shooting Percentage
 ```{r echo=FALSE, out.width = '80%',fig.align="center"}
@@ -662,7 +668,7 @@ We choose players attend more than 30 games in a season (82 games in total), pla
 
 You can also click on the buttons at top left of the plot to show only your intreseted position.
 
-```{r echo=FALSE, out.width = '80%',fig.align="center"}
+```{r echo=FALSE, out.width = '80%',fig.align="center",fig.cap="Sharing Ball-Front page"}
 knitr::include_graphics("../image/shinyapp_sharingBall_frontPage.png")
 ```
 
@@ -690,11 +696,12 @@ The plot uses Ast% and Tov% as axises and USG% as markers' size to demostrate sh
 ## VII. Conclusion
 ***
 
-+ The [age](### Age) distribution for the past 15 years is almost the same while minimum age has increased by 1 year since NBA had increased the draft-eligible age from 18 to 19.
-+ Increasing of [average height/weight ratio](### Height/Weight Ratio) suggests players are becoming more and more facile and fast.
-+ [Pace and Points Per Game](### Overall Offensive Performance) have the similar increasing trend. The increasing in Pace means a more active offense and have a higher chances of scoring.
++ The age distribution for the past 15 years is almost the same while minimum age has increased by 1 year since NBA had increased the draft-eligible age from 18 to 19.
++ Increasing of average height/weight ratio suggests players are becoming more and more facile and fast.
++ Pace and Points Per Game have the similar increasing trend. The increasing in Pace means a more active offense and have a higher chances of scoring.
 + The strategy of NBA teams to score more is to try more 3 pointers and keep 2 pointers shots more efficient.
 + The NBA teams makes it to keeping throwing more 3 pointers and in the meanwhile raise the FG% of 2 pointers. They decrease the attempts to shoot from ‘low efficence’ regions and focus more near the basket.
++ Assit rising dramaticly since 2013 while turnover first rises until 2014 and starts drop till now. This may because in 2013 and 2014 teams started to speed up and encourage passing while players didn’t get used to this style and plenty passes turns into turnover. From 2015, teams began to figure out how to pass the ball right to the scorer and reduce bad passes.
 
 
 <br><br>
