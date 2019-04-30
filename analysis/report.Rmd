@@ -42,11 +42,11 @@ knitr::include_graphics("../image/NBA_players_color-blast_drk.jpg")
 ## I. Introduction
 ***
 
-The National Basketball Association(NBA) is a men's professional basketball league in North America composed of 30 teams. With David Stern's(the fourth NBA Commissioner) great efforts, NBA turns into the sport of the modern world from an unknown commodity outside the United States. Beside its business modes and fame, NBA's games are going through great revolutions during last 15 years. ^[1](https://web.archive.org/web/20150630155528/http://www.usab.com/about/inside-usa-basketball/members.aspx)^ ^[2](https://en.wikipedia.org/wiki/National_Basketball_Association)^
+The National Basketball Association(NBA) is a men's professional basketball league in North America composed of 30 teams. With David Stern's(the fourth NBA Commissioner) great efforts, NBA turns into the sport of the modern world from an unknown commodity outside the United States. Besides its business modes and fame, NBA's games are going through great revolutions during the last 15 years. ^[1](https://web.archive.org/web/20150630155528/http://www.usab.com/about/inside-usa-basketball/members.aspx)^ ^[2](https://en.wikipedia.org/wiki/National_Basketball_Association)^
 
 Today we are able to analyze the teams' and players' performance from different angles using their gaming data instead of simply watching video records, which provides us more ways to learn and enjoy the basketball games.
 
-In this report, we are going to use data to find out how NBA changes for the past 15 years. We are curious about how the overall stragety of teams changes as well as how players adapt to these changes.
+In this report, we are going to use data to find out how NBA changes for the past 15 years. We are curious about how the overall strategy of teams changes as well as how players adapt to these changes.
 
 <br><br>
 
@@ -59,24 +59,24 @@ _Chao Yin_ is mainly responsible for collecting team/player game stats data whil
 
 Our data is collected from [Basketball-Reference](https://www.basketball-reference.com/) and [Stats NBA](https://stats.nba.com/).
 
-* *Basketball Reference* is a site providing both basic and sabermetric statistics and resources for basketball fans using offical NBA data. 
+* *Basketball Reference* is a site providing both basic and sabermetric statistics and resources for basketball fans using official NBA data. 
 
 * *Stats NBA* is the home of NBA Advanced Stats and provides  official NBA Statistics and advanced analytics. 
 
 
-Data in Basketball-Reference is stored in XML so that we can directly extract them using packages `XML` and `RCurl`. However, some tables on this site are commented and they can only be downloaded manually in csv form thus we choose Stats NBA for other data. It's a bit harder to extract data tables from Stats NBA than from Basketball-Reference since they are stored in json files. We use `statsnbaR` which provides utility functions to download data from the API end-points of Stats NBA. We got `teams` from Basketball -Reference and `players` from Stats NBA.
+Data in Basketball-Reference is stored in XML so that we can directly extract them using packages `XML` and `RCurl`. However, some tables on this site are commented and they can only be downloaded manually in CSV form thus we choose Stats NBA for other data. It's a bit harder to extract data tables from Stats NBA than from Basketball-Reference since they are stored in JSON files. We use `statsnbaR` which provides utility functions to download data from the API end-points of Stats NBA. We got `teams` from Basketball -Reference and `players` from Stats NBA.
 
 
 ### Datasets and variables
 
-`players` datasets contains all regular season information of all players in one season. 
+`players` datasets contain all regular season information of all players in one season. 
 
 <br>
 General data provides basic players' performance including:
 
 * Profile information like Name, Team, Age, Game Played, Minutes Played, etc.
 
-* Shooting performance from 2 pointer, 3 pointer and free throw like Field Goalds Made, Field Goals Attempted, Field Goal Percentage, etc.
+* Shooting performance from 2 pointer, 3 pointer and free throw like Field Goals Made, Field Goals Attempted, Field Goal Percentage, etc.
 
 * Basic stats per game like Rebounds, Assists, Steals, Blocks, Points, Turnovers, Personal Fouls, etc.
 
@@ -98,17 +98,17 @@ Bio dataset contains players' biographical data:
 
 * Height and weight data
 
-* Birth date
+* Birthdate
 
 * College attended
 
 <br>
 
-`teams` datasets contains similar information as shown in the `players` but corresponds to each team in the league. However, `teams` provides ways to split the data in order to measure the teams' performance from different angles:
+`teams` datasets contain similar information as shown in the `players` but corresponds to each team in the league. However, `teams` provides ways to split the data in order to measure the teams' performance from different angles:
 
 * *Location* helps measure teams' gaming performance at home or on the road respectively
 
-* *Wins-Losses* tells how the team played when they won or losed the game
+* *Wins-Losses* tells how the team played when they won or lost the game
 
 * *Month* and *Pre/Post All Stars* give teams' performance changes over time periods
 
@@ -118,9 +118,9 @@ Bio dataset contains players' biographical data:
 
 Teams in NBA keep changing in these 15 years. Three teams change their team locations and team names thus we may find the teams are not necessarily the same each year. Players can be traded and signed during the season, which makes some players have more records than others in these datasets.
 
-Height data in `bio` dataset is saved as character,such as "6-8", which requires us to convert them to numeric.
+Height data in `bio` dataset is saved as character, such as "6-8", which requires us to convert them to numeric.
 
-Also all data are saved as factor, which requires us to convert them to numeric or character.
+Also, all data are saved as factor, which requires us to convert them to numeric or character.
 
 <br><br>
 
@@ -136,7 +136,7 @@ load('../data/tidy/Team_shooting.RData')
 
 After we got all the raw data in **[data/raw](https://github.com/c-yin/GR5293-finalproj-group10/tree/master/data/raw)**, we wanted to combine them into four datasets: `Team_splits`, `Team_shoots`, `Player` & `Players_bio`, which are stored in **[data/tidy](https://github.com/c-yin/GR5293-finalproj-group10/tree/master/data/tidy)**.
 
-For the players' data, we first remove empty rows and columns and turn the variables into numerics and characters according to their content. Considering more and more players can play more than one position today, we group the players into three kinds: Guards, Wings and Bigs instead of the origin positions they play. And finally we combind players data of all 15 years and got `Player`.
+For the players' data, we first remove empty rows and columns and turn the variables into numerics and characters according to their content. Considering more and more players can play more than one position today, we group the players into three kinds: Guards, Wings, and Bigs instead of the origin positions they play. And finally, we combined players data of all 15 years and got `Player`.
 
 _* Scroll down the table to see more details_
 ```{r warning=FALSE,message=FALSE}
@@ -170,7 +170,7 @@ print(dfSummary(Players_bio,
 
 For teams' data, we split them into two datasets `Team_split` and `Team_shooting`.
 
-`Teams_splits` contains all the 'per game' stats for each 30 team every season. We choose 'Location' filter because all the teams have to play 41 Home game and 41 Road games every year and we simply calculate the mean to get seasonal average stats. We changed the format, removed the ranking variables, combined the basic with advanced data, and put all 15 years data into this one dataset.
+`Teams_splits` contains all the 'per game' stats for each 30 team every season. We choose 'Location' to filter because all the teams have to play 41 Home game and 41 Road games every year and we simply calculate the mean to get seasonal average stats. We changed the format, removed the ranking variables, combined the basic with advanced data, and put all 15 years data into this one dataset.
 
 _* Scroll down the table to see more details_
 ```{r warning=FALSE,message=FALSE}
@@ -185,7 +185,7 @@ print(dfSummary(Team_splits,
       max.tbl.height = 500,method='render')
 ```
 
-`Team_shooting` contains all the shooting performance of each team from different regions on the court. We cleaned them the same way as `Team_splits`
+`Team_shooting` contains all the shooting performance of each team from different regions on the court. We cleaned them the same way as `Team_splits`.
 
 _* Scroll down the table to see more details_
 ```{r warning=FALSE,message=FALSE}
@@ -217,7 +217,7 @@ The first row in Figure 1 shows that the marjority of the data has no missing va
 
 Those rows that have missed *year_start* variable also missed all the following variables. This is because these columns come from another table: bio. Although the bio table itself has no missing values, it does not contain all the players as `Player` data has.
 
-Also, we can see that there are quite some rows missing _3PA_ values, _FT_ values etc. These varibales are related to player's shooting data per season. The missing values mean that these players do not shoot that season.
+Also, we can see that there are quite some rows missing _3PA_ values, _FT_ values, etc. These variables are related to players' shooting data per season. The missing values mean that these players do not shoot that season.
 
 <br><br>
 
@@ -260,15 +260,15 @@ ggplot(data, aes(x=Age, y=Year,group=Year)) +
     axis.text.y = element_text(color = "#000000", size = 11))
 ```
 
-The ridge plot presents the distribution of the NBA players' age by year. The x-axis is the age, the y-axix is the year, the height of each line is the probability of this particular age.
+The ridge plot presents the distribution of the NBA players' age by year. The x-axis is the age, the y-axis is the year, the height of each line is the probability of this particular age.
 
-The three numbers on each distribution is min age, median age and max age(from left to right) of that season.
+The three numbers on each distribution are min age, median age and max age(from left to right) of that season.
 
 As we can see from the plot, the distribution of age has not changed greatly--the majority ages of players are around 20-35. The median age changes slightly from 26 to 25.
 
-We can also notice that there is a jump in the minimum age between 2006 and 2007. The minimum age before 2006 is 18 while the minimum age after 2006 is 19. This is because in 2006, NBA had increased the draft-eligible age from 18 to 19. 
+We can also notice that there is a jump in the minimum age between 2006 and 2007. The minimum age before 2006 is 18 while the minimum age after 2006 is 19. This is because, in 2006, the NBA had increased the draft-eligible age from 18 to 19. 
 
-Another noticeable point is the maximum age. It has serveral increases and decreases. Every increase is mainly caused by one player. Take the increase from 2015 to 2019 as an example, the eldest player is Vince Carter. He is almost the eldest player in NBA history. The reason why these players are still playing is due to multiple reasons: they are still active players, they are not suffered from serious injuries etc.
+Another noticeable point is the maximum age. It has several increases and decreases. Every increase is mainly caused by one player. Take the increase from 2015 to 2019 as an example, the eldest player is Vince Carter. He is almost the eldest player in NBA history. The reason why these players are still playing is due to multiple reasons: they are still active players, they are not suffered from serious injuries, etc.
 
 <br>
 
@@ -303,9 +303,9 @@ ggplot()+
         axis.text.y = element_text(color = "#000000", size = 11))
 ```
 
-This plot presents the average height/weight ratio of the players. It reflects players' the body shape. There is clear increasing trend of this ratio after 2011.
+This plot presents the average height/weight ratio of the players. It reflects players' body shape. There is a clear increasing trend of this ratio after 2011.
 
-While the average height and average weight has not changed much for past 15 years(as we can see in the following table), the increase of the height/weight ratio means the weight is relatively decreasing compared with the height, which suggests the players are becoming more and more facile and fast.
+While the average height and average weight have not changed much for past 15 years(as we can see in the following table), the increase of the height/weight ratio means the weight is relatively decreasing compared with the height, which suggests the players are becoming more and more facile and fast.
 ```{r}
 data <- Players_bio%>%
   filter(Year>=2004)%>%
@@ -354,7 +354,7 @@ Team_splits %>% select(year, pts, pace) %>% group_by(year) %>% summarise(Pace = 
 
 There 's an obvious trend in both **Pace** (the number of possessions a team uses per game) and **PPG** (Points Per Game) of NBA games in recent 15 years. The more possessions a team accumulates, the quicker the pace of the game.
 
-We can see that from 2004 to 2013 the pace and PPG are fluctuating around 93 and 98 respectively, but from 2014 these two stats keep growing and especially in 2019 the pace rise to 101 from 98 last year and PPG increases by nearly 6 points more than last season. It's easy to find a positive associaiton between pace and PPG since the more possessions you have the more chances you can score, though also gives their opponents more chances.
+We can see that from 2004 to 2013 the pace and PPG are fluctuating around 93 and 98 respectively, but from 2014 these two stats keep growing and especially in 2019 the pace rise to 101 from 98 last year and PPG increases by nearly 6 points more than last season. It's easy to find a positive association between pace and PPG since the more possessions you have the more chances you can score, though also gives their opponents more chances.
 
 
 _* The formula for pace is: ((Tm Poss + Opp Poss) / (2 x (Tm MP / 5))). The first part of the equation sums Team Possessions and Opponent's Possessions. The latter half of the equation uses Team Minutes Played, which is the total number of minutes played by each player on the team._  [StatNBA](-- https://www.sportingcharts.com/dictionary/nba/pace-factor.aspx)
@@ -379,9 +379,9 @@ Team_splits %>% select(year, ortg, pctWins) %>% group_by(year) %>%
         plot.title = element_text(size = 17.5, face = 'bold')) 
 ```
 
-This plot shows average **offrtg** (offensive rating, a statistic used to measure a team's offensive performance) of each teams in these 15 years. The color reflects the Win Percentage of each team. The darker the marker is, the more the team wins. 
+This plot shows average **offrtg** (offensive rating, a statistic used to measure a team's offensive performance) of each team in these 15 years. The color reflects the Win Percentage of each team. The darker the marker is, the more the team wins. 
 
-The dashed line is the fitted line of the data. It seems that teams with higher offensive rating(points above the dashed line) tends to have a higher Win Percentage(Darker points).
+The dashed line is the fitted line of the data. It seems that teams with a higher offensive rating(points above the dashed line) tend to have a higher Win Percentage(Darker points).
 
 Offensive Rating shows that the offensive ability of each team started growing from 2013 and reached an unprecedented level in 2018. We are curious about is there any other reasons for such high offensive performance these years except the high pace?
 
@@ -441,11 +441,11 @@ In basketball, a **field goal** is a basket scored on any shot or tap other than
 
 This plot shows the **FGA** (Field Goal Attempt) and **FG%** (Field Goal Percentage) for both 2 pointer and 3 pointer of the league average performance(per team per game). Please note that the FG% only relates to the scored shots -- they are the percentage of scored shots over all the attempts. The sum of 3 pointer FG% and 2 pointer FG% does not necessarily add up to 100%. 
 
-In the left plot, we find that teams in NBA is attempting more and more 3 pointers year by year without decreasing too much 2 pointer attempts. In 2019, FGA for 3 is more than twice of that 15 years ago. Also in 2019, FGA for 3 is beyond 30 and FGA for 2 is below 60, which means in average every three shots in a NBA game ther is one 3 pointer shot in 2019. 
+In the left plot, we find that teams are attempting more and more 3 pointer year by year without decreasing too much 2 pointer attempts. In 2019, FGA for 3 is more than twice of that 15 years ago. Also in 2019, FGA for 3 is beyond 30 and FGA for 2 is below 60, which means in average every three shots in an NBA game there is one 3 pointer shot in 2019. 
 
-The right plot tells the FG% of 2 pointer and 3 pointer from 2004 to 2019. It's clear that the FG% for 2 keeps growing from 2012 and reached beyond 50% since 2017. The FG% for 3 is fluctuating between 35% and 36% in most years. We can see that teams are trying to make 2 pointers shots more efficient by increasing the FG% of it.
+The right plot tells the FG% of 2 pointer and 3 pointer from 2004 to 2019. It's clear that the FG% for 2 keeps growing from 2012 and reached beyond 50% since 2017. The FG% for 3 is fluctuating between 35% and 36% in most years. We can see that teams are trying to make 2 pointer shots more efficient by increasing the FG% of it.
 
-__From these two plots, we can see that the strategy of NBA teams to score more is to try more 3 pointers and keep 2 pointers shots more efficient.__
+__From these two plots, we can see that the strategy of NBA teams to score more is to try more 3 pointer and keep 2 pointer shots more efficient.__
 
 ```{r, fig.width=15, fig.height=10,fig.align="center"}
 Team_shooting$distance <- factor(Team_shooting$distance, levels = unique(Team_shooting$distance))
@@ -490,13 +490,13 @@ p2 <- Team_shooting %>% filter(distance != 'Back Court Shot') %>% select(distanc
 grid.arrange(p1, p2, ncol = 2)
 ```
 
-This plot shows FGA and FG% of shots from different region on the court. The distance is how far the shooting spot is from the basket. 
+This plot shows FGA and FG% of shots from different regions on the court. The distance is how far the shooting spot is from the basket. 
 
-Shots beyond 23 feet 9 inches from the basket is 3 pointers and others are 2 pointers. The 24+ ft data are similar with that of the 3 pointer in the plot above. The 2 pointer shots can be decomposed into 3 types -- 'near basket'(Less than 8 ft.), 'mid-range'(8-16 ft.), 'long-range'(16-24 ft.). 
+Shots beyond 23 feet 9 inches from the basket is 3 pointer and others are 2 pointer. The 24+ ft data are similar to that of the 3 pointer in the plot above. The 2 pointer shots can be decomposed into 3 types -- 'near basket'(Less than 8 ft.), 'mid-range'(8-16 ft.), 'long-range'(16-24 ft.). 
  
- We can see from the left plot that 'near basket' 2 pointers' FGA is the most among all and it reaches 30 in 2019 which is even more than the sum of other two types. While 'long-range' shots keeps going down and 'mid-range' remains around 12. Considering the difficulty of making a field goal rises with the distance from the basket, 'long-range' shots seems to be less valuable than 'near basket' ones. In the right plot, we can see 'near basket' shots' FG% goes far beyond others and reached 58% in 2019 while 'mid-range' shots' FG% also keeps rising.
+We can see from the left plot that 'near basket' 2 pointer FGA is the most among all and it reaches 30 in 2019 which is even more than the sum of the other two types. While 'long-range' shots keeps going down and 'mid-range' remains around 12. Considering the difficulty of making a field goal rises with the distance from the basket, 'long-range' shots seem to be less valuable than 'near basket' ones. In the right plot, we can see 'near basket' shots' FG% goes far beyond others and reached 58% in 2019 while 'mid-range' shots' FG% also keeps rising.
 
-__This may explain how the NBA teams makes it to keeping throwing more 3 pointers and in the meanwhile raise the FG% of 2 pointers. They decrease the attempts to shoot from 'low efficiency' regions and focus more near the basket.__
+__NBA teams keep throwing more 3 pointer and in the meanwhile raise the FG% of 2 pointer. They decrease the attempts to shoot from 'low efficiency' regions and focus more near the basket.__
 
 ```{r, message=FALSE,fig.align="center"}
 Team_splits %>% select(year, pctTS, pctWins) %>% group_by(year) %>%
@@ -519,9 +519,9 @@ Team_splits %>% select(year, pctTS, pctWins) %>% group_by(year) %>%
         plot.title = element_text(size = 17.5, face = 'bold'))
 ```
 
-**TS%** (True Shooting Percentage, measures efficiency at shooting the ball) synthesizes field goal percentage, free throw percentage, and three-point field goal percentage instead of take them individually to calculate shooting more accurately. The same as before, the darker the marker is, the more the team wins. 
+**TS%** (True Shooting Percentage, measures efficiency at shooting the ball) synthesizes field goal percentage, free throw percentage, and 3 pointer field goal percentage instead of taking them individually to calculate shooting more accurately. The same as before, the darker the marker is, the more the team wins. 
 
-It's easy to find that the curve of TS% shares the simialr shape of that of _offrtg_ curve and teams at present shoots much more efficiently than 15 years ago.
+It's easy to find that the curve of TS% shares the similar shape of that of _offrtg_ curve and teams at present shoots much more efficiently than 15 years ago.
 
 _* TS%=Points/ [2 x (Field Goals Attempted+0.44 x Free Throws Attempted)]. This is a shooting percentage that factors in the value of three-point field goals and free throws in addition to conventional two-point field goals._  [StatNBA](-- https://www.sportingcharts.com/dictionary/nba/pace-factor.aspx)
 
@@ -554,7 +554,7 @@ Team_splits %>% select(year, ast, tov) %>% group_by(year) %>% summarise_all(mean
 
 **Ast** (Assist, attributed to a player who passes the ball to a teammate in a way that leads to a score by field goal) roughly measures the willingness and ability of a team to share the ball and **tov** (Turnover, occurs when a team loses possession of the ball to the opposing team before a player takes a shot at their team's basket) give a angle to view how disciplined the team is.
 
-In this plot, we can see that the assit rising dramaticly in 2013 and since then it keeps growing. While turnover first rises until 2014 and starts drop till now. It's likely that in 2013 and 2014 teams started to speed up and encourage passing while players didn't get used to this style and a lot of passes turns into turnover. From 2015, teams began to figure out how to pass the ball right to the scorer and reduce bad passes.
+In this plot, we can see that the assist rising dramatically in 2013 and since then it keeps growing. While turnover first rises until 2014 and starts to drop till now. It's likely that in 2013 and 2014 teams started to speed up and encourage passing while players didn't get used to this style and a lot of passes turns into turnover. From 2015, teams began to figure out how to pass the ball right to the scorer and reduce bad passes.
 
 ```{r, message=FALSE,fig.align="center"}
 Team_splits %>% select(year, ratioAST, pctWins) %>% group_by(year) %>%
@@ -577,7 +577,7 @@ Team_splits %>% select(year, ratioAST, pctWins) %>% group_by(year) %>%
         plot.title = element_text(size = 17.5, face = 'bold'))
 ```
 
-Assist Ratio is the percentage of a team's possessions that ends in an assist. The growth is obvious in recent three years and we can see there are teams pretty good at sharing balls these years and they all recieve outstanding grades.
+Assist Ratio is the percentage of a team's possessions that ends in an assist. The growth is obvious in recent three years and we can see there are teams pretty good at sharing balls these years and they all receive outstanding grades.
 
 _* Assist Ratio=(AST * 100) / (POSS)._  [StatNBA](-- https://www.sportingcharts.com/dictionary/nba/pace-factor.aspx)
 
@@ -586,15 +586,15 @@ _* Assist Ratio=(AST * 100) / (POSS)._  [StatNBA](-- https://www.sportingcharts.
 ## VI. Interactive Plot
 ***
 
-The following interactive plots are created in shiny app. The link to our shiny app is https://cy2507.shinyapps.io/NBA_15years/. You may click on the link to play with the interactive components.
+The following interactive plots are created in a shiny app. The link to our shiny app is https://cy2507.shinyapps.io/NBA_15years/. You may click on the link to play with the interactive components.
 
 ### Scoring
 
-This part shows analysis of changes in players' scoring methods and efficiency during last 15 years in NBA. Definitions of terminologies we'll mention are on the right part.
+This part shows the analysis of changes in players' scoring methods and efficiency during the last 15 years in the NBA. Definitions of terminologies we'll mention are on the right part.
 
 We choose players who attend more than 30 games in a season (82 games in total), play for more than 15 minutes per game (48 minutes in total), and at least 0.1 3-pointer attempts.
 
-You can also click on the buttons at top left of the plot to show only your intreseted position.
+You can also click on the buttons at the top left of the plot to show only your interested position.
 
 ```{r echo=FALSE, out.width = '80%',fig.align="center",fig.cap="Scoring-Front page"}
 knitr::include_graphics("../image/shinyapp_scoring_frontPage.png")
@@ -607,7 +607,7 @@ knitr::include_graphics("../image/shinyapp_scoring_frontPage.png")
 knitr::include_graphics("../image/shinyapp_scoring_fieldGoalAttempt.png")
 ```
 
-This plot uses 3-pointer and 2-pointer FGA (Field Goal Attempts) as axises and total FGA as markers' size to demostrate scoring methods of teams in different seasons.
+This plot uses 3-pointer and 2-pointer FGA (Field Goal Attempts) as axes and total FGA as markers' size to demonstrate scoring methods of teams in different seasons.
 
 From the plot, we can see that starting from 2012, there is a noticeable increase trend in 3-pointer FGA.
 
@@ -619,9 +619,9 @@ From the plot, we can see that starting from 2012, there is a noticeable increas
 knitr::include_graphics("../image/shinyapp_scoring_fieldGoalPercentage.png")
 ```
 
-The plot uses 3-pointer and 2-pointer FG% (Field Goal Percentage) as axises and total FGA as markers' size to demostrate scoring effieciency of teams in different seasons.
+The plot uses 3-pointer and 2-pointer FG% (Field Goal Percentage) as axes and total FGA as markers' size to demonstrate the scoring efficiency of teams in different seasons.
 
-We can see that 3-pointer field goal percentage is around the same while the 2-pointer field goal percentage is increasing. The strategy of NBA teams to score more is to keep 2 pointers shots more efficient.
+We can see that 3-pointer field goal percentage is around the same while the 2-pointer field goal percentage is increasing. The strategy of NBA teams to score more is to keep 2 pointer shots more efficient.
 
 <br>
 
@@ -630,9 +630,9 @@ We can see that 3-pointer field goal percentage is around the same while the 2-p
 knitr::include_graphics("../image/shinyapp_scoring_3PA.png")
 ```
 
-The plot uses 3-pointer and 3-pointer percentage as axises and total FGA as markers' size to demostrate three pointer performance of teams in different seasons.
+The plot uses 3-pointer and 3-pointer percentage as axes and total FGA as markers' size to demonstrate 3 pointer performance of teams in different seasons.
 
-The 3-pointer field goal percentage is around 30% to 40%. The strategy of NBA teams to score more is to try more 3 pointers.
+The 3-pointer field goal percentage is around 30% to 40%. The strategy of NBA teams to score more is to try more 3 pointer.
 
 <br>
 
@@ -641,7 +641,7 @@ The 3-pointer field goal percentage is around 30% to 40%. The strategy of NBA te
 knitr::include_graphics("../image/shinyapp_scoring_2PA.png")
 ```
 
-The plot uses 2-pointer and 2 pointer percentage as axises and total FGA as markers' size to demostrate two pointer performance of teams in different seasons.
+The plot uses 2-pointer and 2 pointer percentage as axes and total FGA as markers' size to demonstrate two pointer performance of teams in different seasons.
 
 The 2-pointer field goals are decreasing while the 2-pointer field goals are increasing.
 
@@ -652,19 +652,19 @@ The 2-pointer field goals are decreasing while the 2-pointer field goals are inc
 knitr::include_graphics("../image/shinyapp_scoring_trueShootingPercentage.png")
 ```
 
-The plot uses TS%(True Shooting Percentage) and FG(Field Goals) as axises and FGA(Field Goals Attempts) as markers' size to demostrate shooting ability of teams in different seasons.
+The plot uses TS%(True Shooting Percentage) and FG(Field Goals) as axes and FGA(Field Goals Attempts) as markers' size to demonstrate the shooting ability of teams in different seasons.
 
-The TS% has increased around 10% for the past 15 years. Please note that this is quite a huge improvement in shooting ability. Among all the positions, _bigs_ improve the most.
+TS% has increased by around 10% for the past 15 years. Please note that this is quite a huge improvement in shooting ability. Among all the positions, _bigs_ improve the most.
 
 <br>
 
 ### Sharing Ball
 
-This part shows analysis of changes in players' willingness and ability of sharing ball during last 15 years in NBA. Definitions of terminologies we'll mention are on the right part.
+This part shows analysis of changes in players' willingness and ability to share ball during the last 15 years in the NBA. Definitions of terminologies we'll mention are on the right part.
 
-We choose players attend more than 30 games in a season (82 games in total), play for more than 15 minutes per game (48 minutes in total).
+We choose players who attend more than 30 games in a season (82 games in total), play for more than 15 minutes per game (48 minutes in total).
 
-You can also click on the buttons at top left of the plot to show only your intreseted position.
+You can also click on the buttons at the top left of the plot to show only your interested position.
 
 ```{r echo=FALSE, out.width = '80%',fig.align="center",fig.cap="Sharing Ball-Front page"}
 knitr::include_graphics("../image/shinyapp_sharingBall_frontPage.png")
@@ -676,9 +676,9 @@ knitr::include_graphics("../image/shinyapp_sharingBall_frontPage.png")
 knitr::include_graphics("../image/shinyapp_sharingBall_assVsTov.png")
 ```
 
-The plot uses Assist and Turnover as axises and USG%(Usage rate) as markers' size to demostrate shooting ability of teams in different seasons.
+The plot uses Assist and Turnover as axes and USG%(Usage rate) as markers' size to demonstrate the shooting ability of teams in different seasons.
 
-The pace of the game is increasing: the Assit and Turnover both increases. Players tend to share the ball and assist others.
+The pace of the game is increasing: the Assist and Turnover both increase. Players tend to share the ball and assist others.
 
 _* Usage rate, a.k.a., usage percentage is an estimate of the percentage of team plays used by a player while he was on the floor. By balancing usage rates and the varying offensive ratings of the five players on the court, a team can achieve optimal offensive output._
 
@@ -687,7 +687,7 @@ _* Usage rate, a.k.a., usage percentage is an estimate of the percentage of team
 knitr::include_graphics("../image/shinyapp_sharingBall_assPercentageVsTovPercentage.png")
 ```
 
-The plot uses Ast% and Tov% as axises and USG% as markers' size to demostrate shooting ability of teams in different seasons.
+The plot uses Ast% and Tov% as axises and USG% as markers' size to demonstrate shooting ability of teams in different seasons.
 
 Although it seems that the turnover is increasing in the previous plot, the percentage of the turnover is actually around the same and even decreases a little bit.
 
@@ -698,12 +698,12 @@ Another noticeable point is that the ast%/tov% of the _wings_ position is increa
 ## VII. Conclusion
 ***
 
-+ The age distribution for the past 15 years is almost the same while minimum age has increased by 1 year since NBA had increased the draft-eligible age from 18 to 19.
++ The age the distribution for the past 15 years is almost the same while minimum age has increased by 1 year since NBA had increased the draft-eligible age from 18 to 19.
 + Increasing of average height/weight ratio suggests players are becoming more and more facile and fast.
-+ Pace and Points Per Game have the similar increasing trend. The increasement in Pace means a more active offense and have a higher chances of scoring.
-+ The strategy of NBA teams to score more is to try more 3 pointers and keep 2 pointers shots more efficient.
-+ The NBA teams makes it to keeping throwing more 3 pointers and in the meanwhile raise the FG% of 2 pointers. They decrease the attempts to shoot from ‘low efficiency’ regions and focus more near the basket.
-+ Assit rises dramaticly since 2013 while turnover first rises until 2014 and starts drop till now. This may because in 2013 and 2014 teams started to speed up and encourage passing while players didn’t get used to this style and plenty passes turns into turnover. From 2015, teams began to figure out how to pass the ball right to the scorer and reduce bad passes.
++ Pace and Points Per Game have a similar increasing trend. The increase in Pace means a more active offense and have higher chances of scoring.
++ The strategy of NBA teams to score more is to try more 3 pointer and keep 2 pointer shots more efficient.
++ NBA teams keep throwing more 3 pointer and in the meanwhile raise the FG% of 2 pointer. They decrease the attempts to shoot from 'low efficiency' regions and focus more near the basket.
++ Assist rises dramatically since 2013 while turnover first rises until 2014 and starts drop till now. This may because in 2013 and 2014 teams started to speed up and encourage passing while players didn’t get used to this style and plenty passes turns into turnover. From 2015, teams began to figure out how to pass the ball right to the scorer and reduce bad passes.
 
 
 <br><br>
