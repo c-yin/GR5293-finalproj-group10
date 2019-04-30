@@ -57,17 +57,15 @@ In this report, we are going to use data to find out how NBA changes for the pas
 
 _Chao Yin_ is mainy responible for collection of team/player game stats data while _Zeyu Yang_ is responsible for players' biographical information.
 
-Our data is collected from [Basketball-Reference](https://www.basketball-reference.com/), [Stats NBA](https://stats.nba.com/) and [Kaggle](https://www.kaggle.com/drgilermo/nba-players-stats).
+Our data is collected from [Basketball-Reference](https://www.basketball-reference.com/) and [Stats NBA](https://stats.nba.com/).
 
 * *Basketball Reference* is a site providing both basic and sabermetric statistics and resources for basketball fans using offical NBA data. 
 
 * *Stats NBA* is the home of NBA Advanced Stats and provides  official NBA Statistics and advanced analytics. 
 
-* *Kaggle* is an online community that allows users to find and publish data sets. 
 
 Data in Basketball-Reference is stored in XML so that we can directly extract them using packages `XML` and `RCurl`. However, some tables on this site are commented and they can only be downloaded manually in csv form thus we choose Stats NBA for other data. It's a bit harder to extract data tables from Stats NBA than from Basketball-Reference since they are stored in json files. We use `statsnbaR` which provides utility functions to download data from the API end-points of Stats NBA. We got `teams` from Basketball -Reference and `players` from Stats NBA.
 
-Kaggle is the source of player's biographical data. The aforementioned two sites can also provide the same data but the data is harded to collect since it is not stored in tables.
 
 ### Datasets and variables
 
@@ -136,7 +134,7 @@ load('../data/tidy/Team_splits.RData')
 load('../data/tidy/Team_shooting.RData')
 ```
 
-After we got all the raw data in **data/raw**, we wanted to combine them into four datasets: `Team_splits`, `Team_shoots`, `Player` & `Players_bio`.
+After we got all the raw data in **[data/raw](https://github.com/c-yin/GR5293-finalproj-group10/tree/master/data/raw)**, we wanted to combine them into four datasets: `Team_splits`, `Team_shoots`, `Player` & `Players_bio`, which are stored in **[data/tidy](https://github.com/c-yin/GR5293-finalproj-group10/tree/master/data/tidy)**.
 
 For the players' data, we first remove empty rows and columns and turn the variables into numerics and characters according to their content. Considering more and more players can play more than one position today, we group the players into three kinds: Guards, Wings and Bigs instead of the origin positions they play. And finally we combind players data of all 15 years and got `Player`.
 
