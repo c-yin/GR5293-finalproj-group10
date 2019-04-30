@@ -1,0 +1,12 @@
+name: NBA_15years
+title: NBA_15years
+username:
+account: cy2507
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 899572
+bundleId: 2048694
+url: https://cy2507.shinyapps.io/NBA_15years/
+when: 1556598782.29124
+asMultiple: FALSE
+asStatic: FALSE

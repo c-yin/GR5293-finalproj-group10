@@ -324,7 +324,10 @@ server <- function(input, output) {
              margin = list(
                l = 50, r = 50, b = 100, t = 50, pad = 4
              )
-        )
+        ) %>%
+      animation_slider(
+        currentvalue = list(prefix = "YEAR ", font = list(family = 'times', color='#80b1d3', size = 20))
+      )
   })
   
   output$team2 <- renderUI({
@@ -382,6 +385,9 @@ server <- function(input, output) {
              margin = list(
                l = 50, r = 50, b = 100, t = 50, pad = 4
              )
+      ) %>%
+      animation_slider(
+        currentvalue = list(prefix = "YEAR ", font = list(family = 'times', color='#80b1d3', size = 20))
       )
   })
   
@@ -439,6 +445,9 @@ server <- function(input, output) {
              margin = list(
                l = 50, r = 50, b = 100, t = 50, pad = 4
              )
+      ) %>%
+      animation_slider(
+        currentvalue = list(prefix = "YEAR ", font = list(family = 'times', color='#80b1d3', size = 20))
       )
   })
   
@@ -496,6 +505,9 @@ server <- function(input, output) {
              margin = list(
                l = 50, r = 50, b = 100, t = 50, pad = 4
              )
+      ) %>%
+      animation_slider(
+        currentvalue = list(prefix = "YEAR ", font = list(family = 'times', color='#80b1d3', size = 20))
       )
   })
   
@@ -553,6 +565,9 @@ server <- function(input, output) {
              margin = list(
                l = 50, r = 50, b = 100, t = 50, pad = 4
              )
+      ) %>%
+      animation_slider(
+        currentvalue = list(prefix = "YEAR ", font = list(family = 'times', color='#80b1d3', size = 20))
       )
   })
   
@@ -609,6 +624,9 @@ server <- function(input, output) {
              margin = list(
                l = 50, r = 50, b = 100, t = 50, pad = 4
              )
+      ) %>%
+      animation_slider(
+        currentvalue = list(prefix = "YEAR ", font = list(family = 'times', color='#80b1d3', size = 20))
       )
   })
   
@@ -667,6 +685,9 @@ server <- function(input, output) {
              margin = list(
                l = 50, r = 50, b = 100, t = 50, pad = 4
              )
+      ) %>%
+      animation_slider(
+        currentvalue = list(prefix = "YEAR ", font = list(family = 'times', color='#80b1d3', size = 20))
       )
   })
 }
