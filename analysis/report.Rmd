@@ -654,9 +654,9 @@ The 2-pointer field goals are decreasing while the 2-pointer field goals are inc
 knitr::include_graphics("../image/shinyapp_scoring_trueShootingPercentage.png")
 ```
 
-The plot uses TS% and FG as axises and FGA as markers' size to demostrate shooting ability of teams in different seasons.
+The plot uses TS%(True Shooting Percentage) and FG(Field Goals) as axises and FGA(Field Goals Attempts) as markers' size to demostrate shooting ability of teams in different seasons.
 
-
+The TS% has increased around 10% for the past 15 years. Please note that this is quite a huge improvement in shooting ability. Among all the positions, _bigs_ improve the most.
 
 <br>
 
@@ -680,7 +680,7 @@ knitr::include_graphics("../image/shinyapp_sharingBall_assVsTov.png")
 
 The plot uses Assist and Turnover as axises and USG%(Usage rate) as markers' size to demostrate shooting ability of teams in different seasons.
 
-
+The pace of the game is increasing: the Assit and Turnover both increases. Players tend to share the ball and assist others.
 
 _* Usage rate, a.k.a., usage percentage is an estimate of the percentage of team plays used by a player while he was on the floor. By balancing usage rates and the varying offensive ratings of the five players on the court, a team can achieve optimal offensive output._
 
@@ -690,6 +690,10 @@ knitr::include_graphics("../image/shinyapp_sharingBall_assPercentageVsTovPercent
 ```
 
 The plot uses Ast% and Tov% as axises and USG% as markers' size to demostrate shooting ability of teams in different seasons.
+
+Although it seems that the turnover is increasing in the previous plot, the percentage of the turnover is actually around the same and even decreases a little bit.
+
+Another noticeable point is that the ast%/tov% of the _wings_ position is increasing. It suggests they are playing a more import role in organizing offense.
 
 <br><br>
 
