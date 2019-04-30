@@ -42,6 +42,9 @@ knitr::include_graphics("../image/NBA_players_color-blast_drk.jpg")
 ## I. Introduction
 ***
 
+The National Basketball Association(NBA) is a men's professional basketball league in North America composed of 30 teams. Thanks to David Stern's(the fourth NBA Commissioner) great efforts, NBA turns into the sport of the modern world from an unknown commodity outside the United States. Beside its business modes and fame, NBA's games are going through great revolutions during last 15 years. ^[1](https://web.archive.org/web/20150630155528/http://www.usab.com/about/inside-usa-basketball/members.aspx)^ ^[2](https://en.wikipedia.org/wiki/National_Basketball_Association)^
+
+Today we are able to analyze the teams' and players' performance from different angles using their gaming data instead of simply watching video records, which provides us more ways to learn and enjoy the basketball games.
 
 <br><br>
 
@@ -267,6 +270,7 @@ We can also notice that there is a jump in the minimum age between 2006 and 2007
 
 Another noticeable point is the maximum age. It has serveral increases and decreases. Every increase is mainly caused by one player. Take the increase from 2015 to 2019 as an example, the eldest player is Vince Carter. He is almost the eldest player in NBA history. The reason why these players are still playing is due to multiple reasons: they are still active players, they are not suffered from serious injuries etc.
 
+<br>
 
 ### Height/Weight Ratio
 ```{r fig.align="center"}
@@ -320,6 +324,7 @@ pander(data)
 ```
 
 _* The first row is the average height data(cm), the second row is the average weight data(pound)._
+
 <br>
 
 ### Overall Offensive Performance
@@ -381,6 +386,8 @@ The dashed line is the fitted line of the data. It seems that teams with higher 
 Offensive Rating shows that the offensive ability of each team started growing from 2013 and reached an unprecedented level in 2018. We are curious about is there any other reasons for such high offensive performance these years except the high pace?
 
 _* offrtg = 100x((Points)/(POSS). It measures a team's points scored per 100 possessions. On a player level, this statistic is team points scored per 100 possessions while he is on court._  [StatNBA](-- https://www.sportingcharts.com/dictionary/nba/pace-factor.aspx)
+
+<br>
 
 ### Scoring 
 
@@ -518,6 +525,8 @@ It's easy to find that the curve of TS% shares the simialr shape of that of _off
 
 _* TS%=Points/ [2 x (Field Goals Attempted+0.44 x Free Throws Attempted)]. This is a shooting percentage that factors in the value of three-point field goals and free throws in addition to conventional two-point field goals._  [StatNBA](-- https://www.sportingcharts.com/dictionary/nba/pace-factor.aspx)
 
+<br>
+
 ### Sharing the ball
 
 Basketball teamwork is in fact very important as it allows the team to function together and not individually. During offensive situations, teamwork is vital because you need to confuse the defense on who will take the shot or where the shot will come from.  If there is only one person making the shot for the team, then the defense will mostly concentrate their efforts in putting a stop to their scorer.
@@ -577,11 +586,115 @@ _* Assist Ratio=(AST * 100) / (POSS)._  [StatNBA](-- https://www.sportingcharts.
 ## VI. Interactive Plot
 ***
 
+The following interactive plots are created in shiny app. The link to our shiny app is https://cy2507.shinyapps.io/NBA_15years/. You may click on the link to play with the interactive components.
+
+### Scoring
+
+This part shows analysis of changes in players' scoring methods and efficiency during last 15 years in NBA. Definitions of terminologies we'll mention are on the right part.
+
+We choose players who attend more than 30 games in a season (82 games in total), play for more than 15 minutes per game (48 minutes in total), and at least 0.1 3-pointer attempts.
+
+You can also click on the buttons at top left of the plot to show only your intreseted position.
+
+```{r echo=FALSE, out.width = '80%',fig.align="center",fig.cap="Scoring-Front page"}
+knitr::include_graphics("../image/shinyapp_scoring_frontPage.png")
+```
+
+
+#### Field Goal Attempts
+
+```{r echo=FALSE, out.width = '80%',fig.align="center"}
+knitr::include_graphics("../image/shinyapp_scoring_fieldGoalAttempt.png")
+```
+
+This plot uses 3-pointer and 2-pointer FGA (Field Goal Attempts) as axises and total FGA as markers' size to demostrate scoring methods of teams in different seasons.
+
+From the plot, we can see that starting from 2012, there is a noticeable increase trend in 3-pointer FGA.
+
+<br>
+
+#### Field Goal Percentage
+
+```{r echo=FALSE, out.width = '80%',fig.align="center"}
+knitr::include_graphics("../image/shinyapp_scoring_fieldGoalPercentage.png")
+```
+
+The plot uses 3-pointer and 2-pointer FG% (Field Goal Percentage) as axises and total FGA as markers' size to demostrate scoring effieciency of teams in different seasons.
+
+We can see that 3-pointer filed goal percentage is around the same while the 2-pointer filed goal percentage is increasing. The strategy of NBA teams to score more is to try more 3 pointers and keep 2 pointers shots more efficient.
+
+
+#### 3-pointer Performance
+```{r echo=FALSE, out.width = '80%',fig.align="center"}
+knitr::include_graphics("../image/shinyapp_scoring_3PA.png")
+```
+
+The plot uses 3-pointer and 3-pointer percentage as axises and total FGA as markers' size to demostrate three pointer performance of teams in different seasons.
+
+
+
+#### 2-pointer Performance
+```{r echo=FALSE, out.width = '80%',fig.align="center"}
+knitr::include_graphics("../image/shinyapp_scoring_2PA.png")
+```
+
+The plot uses 2-pointer and 2 pointer percentage as axises and total FGA as markers' size to demostrate two pointer performance of teams in different seasons.
+
+
+
+
+#### True Shooting Percentage
+```{r echo=FALSE, out.width = '80%',fig.align="center"}
+knitr::include_graphics("../image/shinyapp_scoring_trueShootingPercentage.png")
+```
+
+The plot uses TS% and FG as axises and FGA as markers' size to demostrate shooting ability of teams in different seasons.
+
+
+
+<br>
+
+### Sharing Ball
+
+This part shows analysis of changes in players' willingness and ability of sharing ball during last 15 years in NBA. Definitions of terminologies we'll mention are on the right part.
+
+We choose players attend more than 30 games in a season (82 games in total), play for more than 15 minutes per game (48 minutes in total).
+
+You can also click on the buttons at top left of the plot to show only your intreseted position.
+
+```{r echo=FALSE, out.width = '80%',fig.align="center"}
+knitr::include_graphics("../image/shinyapp_sharingBall_frontPage.png")
+```
+
+#### Assist VS Turnover
+
+```{r echo=FALSE, out.width = '80%',fig.align="center"}
+knitr::include_graphics("../image/shinyapp_sharingBall_assVsTov.png")
+```
+
+The plot uses Assist and Turnover as axises and USG%(Usage rate) as markers' size to demostrate shooting ability of teams in different seasons.
+
+
+
+_* Usage rate, a.k.a., usage percentage is an estimate of the percentage of team plays used by a player while he was on the floor. By balancing usage rates and the varying offensive ratings of the five players on the court, a team can achieve optimal offensive output._
+
+#### Ast% VS Tov%
+```{r echo=FALSE, out.width = '80%',fig.align="center"}
+knitr::include_graphics("../image/shinyapp_sharingBall_assPercentageVsTovPercentage.png")
+```
+
+The plot uses Ast% and Tov% as axises and USG% as markers' size to demostrate shooting ability of teams in different seasons.
+
 <br><br>
 
 ## VII. Conclusion
 ***
 
++ The [age](### Age) distribution for the past 15 years is almost the same while minimum age has increased by 1 year since NBA had increased the draft-eligible age from 18 to 19.
++ Increasing of [average height/weight ratio](### Height/Weight Ratio) suggests players are becoming more and more facile and fast.
++ [Pace and Points Per Game](### Overall Offensive Performance) have the similar increasing trend. The increasing in Pace means a more active offense and have a higher chances of scoring.
++ The strategy of NBA teams to score more is to try more 3 pointers and keep 2 pointers shots more efficient.
++ The NBA teams makes it to keeping throwing more 3 pointers and in the meanwhile raise the FG% of 2 pointers. They decrease the attempts to shoot from ‘low efficence’ regions and focus more near the basket.
 
 
 <br><br>

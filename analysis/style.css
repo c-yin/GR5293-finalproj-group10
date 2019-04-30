@@ -9,8 +9,11 @@ h1,h2{
   font-size: 24pt;
   margin-bottom: 10px;
 }
-h3,h4,h5,h6{
+h3{
   font-size: 20pt;
+}
+h4,h5,h6{
+  font-size: 17pt;
 }
 .st-multiline {
   white-space: pre;
