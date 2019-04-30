@@ -8,20 +8,20 @@
 
 ## Introduction:
 
-The National Basketball Association(NBA) is a men’s professional basketball league in North America composed of 30 teams. With David Stern’s(the fourth NBA Commissioner) great efforts, NBA turns into the sport of the modern world from an unknown commodity outside the United States. Beside its business modes and fame, NBA’s games are going through great revolutions during last 15 years.
+The National Basketball Association(NBA) is a men’s professional basketball league in North America composed of 30 teams. With David Stern’s(the fourth NBA Commissioner) great efforts, NBA turns into the sport of the modern world from an unknown commodity outside the United States. Besides its business modes and fame, NBA’s games are going through great revolutions during the last 15 years.
 
 Today we are able to analyze the teams’ and players’ performance from different angles using their gaming data instead of simply watching video records, which provides us more ways to learn and enjoy the basketball games.
 
-In this report, we are going to use data to find out how NBA changes for the past 15 years. We are curious about how the overall stragety of teams changes as well as how players adapt to these changes.
+In this report, we are going to use data to find out how NBA changes for the past 15 years. We are curious about how the overall strategy of teams changes as well as how players adapt to these changes.
 
 ## Conclusion:
 
-+ The age distribution for the past 15 years is almost the same while minimum age has increased by 1 year since NBA had increased the draft-eligible age from 18 to 19.
++ The age distribution for the past 15 years is almost the same while the minimum age has increased by 1 year since NBA had increased the draft-eligible age from 18 to 19.
 + Increasing of average height/weight ratio suggests players are becoming more and more facile and fast.
-+ Pace and Points Per Game have the similar increasing trend. The increasement in Pace means a more active offense and have a higher chances of scoring.
-+ The strategy of NBA teams to score more is to try more 3 pointers and keep 2 pointers shots more efficient.
-+ The NBA teams makes it to keeping throwing more 3 pointers and in the meanwhile raise the FG% of 2 pointers. They decrease the attempts to shoot from ‘low efficiency’ regions and focus more near the basket.
-+ Assit rises dramaticly since 2013 while turnover first rises until 2014 and starts drop till now. This may because in 2013 and 2014 teams started to speed up and encourage passing while players didn’t get used to this style and plenty passes turns into turnover. From 2015, teams began to figure out how to pass the ball right to the scorer and reduce bad passes.
++ Pace and Points Per Game have a similar increasing trend. The increase in Pace means a more active offense and have higher chances of scoring.
++ The strategy of NBA teams to score more is to try more 3 pointer and keep 2 pointer shots more efficient.
++ NBA teams keep throwing more 3 pointer and in the meanwhile raise the FG% of 2 pointer. They decrease the attempts to shoot from 'low efficiency' regions and focus more near the basket.
++ Assist rises dramatically since 2013 while turnover first rises until 2014 and starts drop till now. This may because in 2013 and 2014 teams started to speed up and encourage passing while players didn’t get used to this style and plenty passes turns into turnover. From 2015, teams began to figure out how to pass the ball right to the scorer and reduce bad passes.
 
 ## Notes:
 + _/analysis_ folder stores the _report.html_, _report.rmd_, _header.html_, _footer.html_, and _style.css_:
