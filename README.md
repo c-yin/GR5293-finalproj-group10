@@ -8,7 +8,7 @@
 
 ## Introduction:
 
-The National Basketball Association(NBA) is a men’s professional basketball league in North America composed of 30 teams. With David Stern’s(the fourth NBA Commissioner) great efforts, NBA turns into the sport of the modern world from an unknown commodity outside the United States. Beside its business modes and fame, NBA’s games are going through great revolutions during last 15 years. 1 2
+The National Basketball Association(NBA) is a men’s professional basketball league in North America composed of 30 teams. With David Stern’s(the fourth NBA Commissioner) great efforts, NBA turns into the sport of the modern world from an unknown commodity outside the United States. Beside its business modes and fame, NBA’s games are going through great revolutions during last 15 years.
 
 Today we are able to analyze the teams’ and players’ performance from different angles using their gaming data instead of simply watching video records, which provides us more ways to learn and enjoy the basketball games.
 
