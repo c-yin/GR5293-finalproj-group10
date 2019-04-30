@@ -29,9 +29,7 @@ st_options(
 )
 library(knitr)
 opts_chunk$set(comment = NA,prompt = FALSE,cache = FALSE,results = "asis")
-library(data.table)
-library(DT)
-library(knitr)
+library(skimr)
 ```
 
 ## I. Introduction
@@ -132,14 +130,30 @@ For the players' data, we first remove empty rows and columns and turn the varia
 
 _Scroll down the table to see more details_
 ```{r warning=FALSE,message=FALSE}
-print(dfSummary(Player,headings = FALSE,plain.ascii = FALSE,valid.col = FALSE,graph.magnif = 0.75,style = "grid"),max.tbl.height = 500,method='render')
+print(dfSummary(Player,
+                headings = FALSE,
+                plain.ascii = FALSE,
+                valid.col = FALSE,
+                graph.magnif = 0.75,
+                style = "grid",
+                max.distinct.values = 5,
+                varnumbers = FALSE),
+      max.tbl.height = 500,method='render')
 ```
 
 For `Players_bio` data, we join players' data and biographical data and turn the variables into numerics and characters according to their content. 
 
 _Scroll down the table to see more details_
 ```{r warning=FALSE,message=FALSE}
-print(dfSummary(Players_bio,headings = FALSE,plain.ascii = FALSE,valid.col = FALSE,graph.magnif = 0.75,style = "grid"),max.tbl.height = 500,method='render')
+print(dfSummary(Players_bio,
+                headings = FALSE,
+                plain.ascii = FALSE,
+                valid.col = FALSE,
+                graph.magnif = 0.75,
+                style = "grid",
+                max.distinct.values = 5,
+                varnumbers = FALSE),
+      max.tbl.height = 500,method='render')
 ```
 
 
@@ -150,14 +164,30 @@ For teams' data, we split them into two datasets `Team_split` and `Team_shooting
 
 _Scroll down the table to see more details_
 ```{r warning=FALSE,message=FALSE}
-print(dfSummary(Team_splits,headings = FALSE,plain.ascii = FALSE,valid.col = FALSE,graph.magnif = 0.75,style = "grid"),max.tbl.height = 500,method='render')
+print(dfSummary(Team_splits,
+                headings = FALSE,
+                plain.ascii = FALSE,
+                valid.col = FALSE,
+                graph.magnif = 0.75,
+                style = "grid",
+                max.distinct.values = 5,
+                varnumbers = FALSE),
+      max.tbl.height = 500,method='render')
 ```
 
 `Team_shooting` contains all the shooting performance of each team from different regions on the court. We cleaned them the same way as `Team_splits`
 
 _Scroll down the table to see more details_
 ```{r warning=FALSE,message=FALSE}
-print(dfSummary(Team_shooting,headings = FALSE,plain.ascii = FALSE,valid.col = FALSE,graph.magnif = 0.75,style = "grid"),max.tbl.height = 500,method='render')
+print(dfSummary(Team_shooting,
+                headings = FALSE,
+                plain.ascii = FALSE,
+                valid.col = FALSE,
+                graph.magnif = 0.75,
+                style = "grid",
+                max.distinct.values = 5,
+                varnumbers = FALSE),
+      max.tbl.height = 500,method='render')
 ```
 
 
@@ -278,15 +308,12 @@ data <- Players_bio%>%
   dplyr::ungroup()%>%
   column_to_rownames(var="Year")%>%
   t()%>%
-  as.data.frame(stringsAsFactors = FALSE)%>%
-  setDT(keep.rownames = TRUE)
-colnames(data)[1] <- c("Item")
-# datatable(data)
-knitr::kable(data)
+  as.data.frame(stringsAsFactors = FALSE)
+pander(data)
 ```
 
-
-
+_* The first row is the average height data(cm), the second row is the average weight data(pound)._
+<br>
 
 ### Overall Offensive Performance
 
@@ -349,7 +376,7 @@ _* offrtg = 100x((Points)/(POSS). It measures a team's points scored per 100 pos
 
 ### Scoring 
 
-```{r, fig.width=15, fig.height=5,fig.align="center"}
+```{r, fig.width=15, fig.height=7,fig.align="center"}
 p1 <- Team_splits %>% select(year, fg3a, fg2a) %>%
   gather(key = 'type', value = 'attempt', -c(year)) %>%
   group_by(year, type) %>% summarise(attempt = mean(attempt)) %>%
@@ -365,8 +392,8 @@ p1 <- Team_splits %>% select(year, fg3a, fg2a) %>%
   #ylim(0, 2500) +
   ggtitle('Field Goals Attempt') +
   theme_minimal() +
-  theme(axis.text.x = element_text(angle = 60, vjust = 0.5,color = "#000000", size = 11),
-        axis.text.y = element_text(color = "#000000", size = 11),
+  theme(axis.text.x = element_text(angle = 60, vjust = 0.5,color = "#000000", size = 15),
+        axis.text.y = element_text(color = "#000000", size = 15),
         strip.text.y = element_text(size = 10, colour = '#FFFFFF', face = 'bold'),
         strip.background = element_rect(fill = '#17408B', colour = 'white'),
         plot.title = element_text(size = 17.5, face = 'bold'),
@@ -381,28 +408,29 @@ p2 <- Team_splits %>% select(year, pctFG3, pctFG2) %>%
   geom_point(color = '#FFFFFF', size = 2) +
   facet_grid(type ~., scales = 'free_y', labeller = as_labeller(c(`pctFG2` = '2 pointer', `pctFG3` = '3 pointer'))) +
   scale_x_continuous(labels = unique(Team_splits$year), breaks = unique(Team_splits$year)) +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1))+
   xlab('') +
   ylab('') +
   ggtitle('Field Goals Percentage') +
   theme_minimal() + 
-  theme(axis.text.x = element_text(angle = 60, vjust = 0.5,color = "#000000", size = 11),
-        axis.text.y = element_text(color = "#000000", size = 11),
-        strip.text.y = element_text(size = 10, colour = '#FFFFFF', face = 'bold'),
+  theme(axis.text.x = element_text(angle = 60, vjust = 0.5,color = "#000000", size = 15),
+        axis.text.y = element_text(color = "#000000", size = 15),
+        strip.text.y = element_text(size = 15, colour = '#FFFFFF', face = 'bold'),
         strip.background = element_rect(fill = '#17408B', colour = 'white'),
         plot.title = element_text(size = 17.5, face = 'bold'))
 
 grid.arrange(p1, p2, ncol = 2)
 ```
 
-In basketball, a **field goal** is a basket scored on any shot or tap other than a free throw, worth two or three points depending on the distance of the attempt from the basket.
+In basketball, a **field goal** is a basket scored on any shot or tap other than a free throw, worth two or three points depending on the distance of the attempt from the basket. An **attempt** is counted no matter this shot is scored.
 
-This plot shows the **FGA** (Field Goal Attempt) and **FG%** (Field Goal Percentage) for both 2 pointer and 3 pointer of the league average performance. 
+This plot shows the **FGA** (Field Goal Attempt) and **FG%** (Field Goal Percentage) for both 2 pointer and 3 pointer of the league average performance(per team per game). Please note that the FG% only relates to the scored shots -- the sum of 3 pointer FG% and 2 pointer FG% does not necessarily add up to 100%. 
 
 In the left plot, we find that teams in NBA is attempting more and more 3 pointers year by year without decreasing too much 2 pointer attempts. In 2019, FGA for 3 is more than twice of that 15 years ago. Also in 2019, FGA for 3 is beyond 30 and FGA for 2 is below 60, which means in average every three shots in a NBA game ther is one 3 pointer shot in 2019. 
 
 The right plot tells the FG% of 2 pointer and 3 pointer from 2004 to 2019. It's clear that the FG% for 2 keeps growing from 2012 and reached beyond 50% since 2017. The FG% for 3 is fluctuating between 35% and 36% in most years. We can see that teams are trying to make 2 pointers shots more efficient by increasing the FG% of it.
 
-From these two plots, we can see that the strategy of NBA teams to score more is to try more 3 pointers and keep 2 pointers shots more efficient.
+__From these two plots, we can see that the strategy of NBA teams to score more is to try more 3 pointers and keep 2 pointers shots more efficient.__
 
 ```{r, fig.width=15, fig.height=10,fig.align="center"}
 Team_shooting$distance <- factor(Team_shooting$distance, levels = unique(Team_shooting$distance))
@@ -418,10 +446,10 @@ p1 <- Team_shooting %>% filter(distance != 'Back Court Shot') %>% select(distanc
   #ylim(0,1500) +
   ggtitle('Field Goals Attempt by Distance') +
   theme_minimal() +
-    theme(axis.text.x = element_text(angle = 45, vjust = 0.5,color = "#000000", size = 11), 
-          axis.text.y = element_text(color = "#000000", size = 11),
+    theme(axis.text.x = element_text(angle = 45, vjust = 0.5,color = "#000000", size = 15), 
+          axis.text.y = element_text(color = "#000000", size = 15),
           legend.position = 'none',
-          strip.text.y = element_text(size = 10, colour = '#FFFFFF', face = 'bold'),
+          strip.text.y = element_text(size = 15, colour = '#FFFFFF', face = 'bold'),
           strip.background = element_rect(fill = '#17408B', colour = 'white'),
           plot.title = element_text(size = 17.5, face = 'bold'))
 
@@ -432,27 +460,28 @@ p2 <- Team_shooting %>% filter(distance != 'Back Court Shot') %>% select(distanc
   geom_point(color = '#FFFFFF', size = 2) +
   facet_grid(distance ~ ., scales = 'free_y') +
   scale_x_continuous(labels = unique(Team_splits$year), breaks = unique(Team_splits$year)) +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1))+
   xlab('') +
   ylab('') +
   ggtitle('Field Goals Percentage by Distance') +
   theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, vjust = 0.5,color = "#000000", size = 11), 
-        axis.text.y = element_text(color = "#000000", size = 11),
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5,color = "#000000", size = 15), 
+        axis.text.y = element_text(color = "#000000", size = 15),
         legend.position = 'none',
-        strip.text.y = element_text(size = 10, colour = '#FFFFFF', face = 'bold'),
+        strip.text.y = element_text(size = 15, colour = '#FFFFFF', face = 'bold'),
         strip.background = element_rect(fill = '#17408B', colour = 'white'),
         plot.title = element_text(size = 17.5, face = 'bold'))
 
 grid.arrange(p1, p2, ncol = 2)
 ```
 
-This plot shows FGA and FG% of shots from different region on the court. The distance is how far the shooting spot is from the basket. Shots beyond 23 feet 9 inches from the basket is 3 pointers and others are 2 pointers. The 24+ ft data are similar with that of the 3 pointer in the plot above.
+This plot shows FGA and FG% of shots from different region on the court. The distance is how far the shooting spot is from the basket. 
 
- This plot decompose 2 pointer shots into 3 types -- 'near basket', 'mid-range', 'long-range'. 
+Shots beyond 23 feet 9 inches from the basket is 3 pointers and others are 2 pointers. The 24+ ft data are similar with that of the 3 pointer in the plot above. The 2 pointer shots can be decomposed into 3 types -- 'near basket'(Less than 8 ft.), 'mid-range'(8-16 ft.), 'long-range'(16-24 ft.). 
  
  We can see from the left plot that 'near basket' 2 pointers' FGA is the most among all and it reaches 30 in 2019 which is even more than the sum of other two types. While 'long-range' shots keeps going down and 'mid-range' remains around 12. Considering the difficulty of making a field goal rises with the distance from the basket, 'long-range' shots seems to be less valuable than 'near basket' ones. In the right plot, we can see 'near basket' shots' FG% goes far beyond others and reached 58% in 2019 while 'mid-range' shots' FG% also keeps rising.
 
-This may explain how the NBA teams makes it to keeping throwing more 3 pointers and in the meanwhile raise the FG% of 2 pointers. They decrease the attempts to shoot from 'low efficence' regions and focus more near the basket.
+__This may explain how the NBA teams makes it to keeping throwing more 3 pointers and in the meanwhile raise the FG% of 2 pointers. They decrease the attempts to shoot from 'low efficence' regions and focus more near the basket.__
 
 ```{r, message=FALSE,fig.align="center"}
 Team_splits %>% select(year, pctTS, pctWins) %>% group_by(year) %>%
@@ -462,6 +491,7 @@ Team_splits %>% select(year, pctTS, pctWins) %>% group_by(year) %>%
   geom_smooth(linetype = 'longdash', colour = '#C9082A', se = FALSE, size = 2, show.legend = F) +
   theme(axis.text.x = element_text(angle = 45, vjust = 0.5), legend.position = 'none') +
   scale_x_continuous(labels = unique(Team_splits$year), breaks = unique(Team_splits$year)) +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1))+
   ggtitle('Average True Shooting Percentage Per Game') +
   guides(alpha=FALSE)+
   xlab('') +
@@ -471,10 +501,13 @@ Team_splits %>% select(year, pctTS, pctWins) %>% group_by(year) %>%
   theme(axis.text.x = element_text(angle = 45, vjust = 0.5,color = "#000000", size = 11),
         axis.text.y = element_text(color = "#000000", size = 11),
         plot.title = element_text(size = 17.5, face = 'bold'))
-# legend.position = 'none'
 ```
 
-**TS%** (True Shooting Percentage, measures efficiency at shooting the ball) synthesizes field goal percentage, free throw percentage, and three-point field goal percentage instead of take them individually to calculate shooting more accurately. The same as before, the darker the marker is, the more the team wins. It's easy to find that the curve of TS% shares the simialr shape of that of offrtg curve and teams at present shoots much more efficiently than 15 years ago.
+**TS%** (True Shooting Percentage, measures efficiency at shooting the ball) synthesizes field goal percentage, free throw percentage, and three-point field goal percentage instead of take them individually to calculate shooting more accurately. The same as before, the darker the marker is, the more the team wins. 
+
+It's easy to find that the curve of TS% shares the simialr shape of that of _offrtg_ curve and teams at present shoots much more efficiently than 15 years ago.
+
+_* TS%=Points/ [2 x (Field Goals Attempted+0.44 x Free Throws Attempted)]. This is a shooting percentage that factors in the value of three-point field goals and free throws in addition to conventional two-point field goals._  [StatNBA](-- https://www.sportingcharts.com/dictionary/nba/pace-factor.aspx)
 
 ### Sharing the ball
 
@@ -496,7 +529,7 @@ Team_splits %>% select(year, ast, tov) %>% group_by(year) %>% summarise_all(mean
   theme(axis.text.x = element_text(angle = 45, vjust = 0.5,color = "#000000", size = 11), 
         axis.text.y = element_text(color = "#000000", size = 11),
         legend.position = 'none',
-        strip.text.y = element_text(size = 10, colour = '#FFFFFF', face = 'bold'),
+        strip.text.y = element_text(size = 15, colour = '#FFFFFF', face = 'bold'),
         strip.background = element_rect(fill = '#17408B', colour = 'white'),
         plot.title = element_text(size = 17.5, face = 'bold'))
 ```
@@ -507,11 +540,12 @@ In this plot, we can see that the assit rising dramaticly in 2013 and since then
 
 ```{r, message=FALSE,fig.align="center"}
 Team_splits %>% select(year, ratioAST, pctWins) %>% group_by(year) %>%
-  ggplot(aes(x = year, y=ratioAST, alpha = pctWins, color = pctWins)) +
+  ggplot(aes(x = year, y=ratioAST/100, alpha = pctWins, color = pctWins)) +
   geom_jitter(size = 2) +
   scale_colour_gradient(low = "#8ec5ff", high = "#19293a")+
   geom_smooth(linetype = 'longdash', colour = '#C9082A', se = FALSE, size = 2, show.legend = F) +
   scale_x_continuous(labels = unique(Team_splits$year), breaks = unique(Team_splits$year)) +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1))+
   guides(alpha=FALSE)+
   ggtitle('Assist Ratio Per Game') +
   xlab('') +
@@ -526,6 +560,7 @@ Team_splits %>% select(year, ratioAST, pctWins) %>% group_by(year) %>%
 
 Assist Ratio is the percentage of a team's possessions that ends in an assist. The growth is obvious in recent three years and we can see there are teams pretty good at sharing balls these years and they all recieve outstanding grades.
 
+_* Assist Ratio=(AST * 100) / (POSS)._  [StatNBA](-- https://www.sportingcharts.com/dictionary/nba/pace-factor.aspx)
 
 <br><br>
 
