@@ -1,4 +1,4 @@
-# GR5293-finalproj-group10
+# NBA's 15 Years
 
 + Group 10
 + Team members
