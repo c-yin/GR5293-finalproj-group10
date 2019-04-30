@@ -55,7 +55,7 @@ In this report, we are going to use data to find out how NBA changes for the pas
 
 ### Collection
 
-_Chao Yin_ is mainy responible for collection of team/player game stats data while _Zeyu Yang_ is responsible for players' biographical information.
+_Chao Yin_ is mainly responsible for collecting team/player game stats data while _Zeyu Yang_ is responsible for players' biographical information.
 
 Our data is collected from [Basketball-Reference](https://www.basketball-reference.com/) and [Stats NBA](https://stats.nba.com/).
 
@@ -81,7 +81,7 @@ General data provides basic players' performance including:
 * Basic stats per game like Rebounds, Assists, Steals, Blocks, Points, Turnovers, Personal Fouls, etc.
 
 <br>
-Advanced data measures and analysis player's ability in one percific area :
+Advanced data measures and analysis player's ability in one specific area:
 
 * Overall ratings like Offensive Rating, Defensive Rating, Net Rating, Player Impact Estimate, Usage Percentage, etc.
 
@@ -250,7 +250,7 @@ ggplot(data, aes(x=Age, y=Year,group=Year)) +
             position=position_nudge(y=-0.1), colour="#17408B", size=3)+
   xlab("")+
   ylab("")+
-  ggtitle("Age Distibution")+
+  ggtitle("Age Distribution")+
   scale_y_continuous(breaks=seq(2004,2019))+
   scale_x_continuous(breaks=seq(15,45,3))+
   theme_minimal()+
@@ -409,7 +409,7 @@ p1 <- Team_splits %>% select(year, fg3a, fg2a) %>%
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 60, vjust = 0.5,color = "#000000", size = 15),
         axis.text.y = element_text(color = "#000000", size = 15),
-        strip.text.y = element_text(size = 10, colour = '#FFFFFF', face = 'bold'),
+        strip.text.y = element_text(size = 15, colour = '#FFFFFF', face = 'bold'),
         strip.background = element_rect(fill = '#17408B', colour = 'white'),
         plot.title = element_text(size = 17.5, face = 'bold'),
         legend.position = 'none') 
