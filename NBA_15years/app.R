@@ -32,6 +32,45 @@ names(team_abbr) <- team_list
 
 colors = c('#bebada', '#fb8072', '#8dd3c7')
 
+tab_pos <- tabPanel(
+  'Positions',
+  sidebarPanel(
+    h2('Traditional'),
+    p("The five basketball positions normally employed by organized basketball teams are the point guard (PG), the shooting guard (SG), the small forward (SF), the power forward (PF), and the center (C). (Note: Correspnding images left to right.)", style = "font-family: 'times'; font-size: 14pt"),
+    p("Typically the point guard is the leader of the team on the court. This position requires substantial ball handling skills and the ability to facilitate the team during a play. The shooting guard, as the name implies, is often the best shooter. As well as being capable of shooting accurately from longer distances, this position tends to also be the best defender on the team. The small forward often has an aggressive approach to the basket when handling the ball. The small forward is also known to make cuts to the basket in efforts to get open for shots. The power forward and the center are usually called the 'frontcourt', often acting as their team's primary rebounders or shot blockers, or receiving passes to take inside shots. The center is typically the larger of the two.", style = "font-family: 'times'; font-size: 14pt"),
+    h2('Modern'),
+    p('Guards, Wings, Bigs. That, more than PG, SG, SF, PF, C, is the most best and most relevant way to break it down, to relate eras of dominance to the modern game. (Note: Correspnding images left to right.)', style = "font-family: 'times'; font-size: 14pt"),
+    p('Guards (A.K.A. Ball handlers) were traditional point guards that could run an offense. Wings were previously known as shooting guards and small forwards who could both shoot from outside and attack the rim off the dribble. Bigs were players 6’10 and above who could protect the rim and rebound. While most of those descriptions still might hold true, because defenses have started adjusting and switching so much, players have been forced to expand their games.', style = "font-family: 'times'; font-size: 14pt")
+  ),
+  mainPanel(
+    br(),
+    h3('NBA in 90s'),
+    fluidRow(
+      column(12,
+             div(style="display: inline-block; width: 15%;",img(src="stockton.jpg", height = 300, width = 168.75)),
+             div(style="display: inline-block; width: 15%;",img(src="miller.jpg", height = 300, width = 168.75)),
+             div(style="display: inline-block; width: 15%;",img(src="pippen.jpg", height = 300, width = 168.75)),
+             div(style="display: inline-block; width: 15%;",img(src="malone.jpg", height = 300, width = 168.75)),
+             div(style="display: inline-block; width: 15%;",img(src="olajuwon.jpg", height = 300, width = 168.75)))
+      ),
+    br(),
+    br(),
+    br(),
+    br(),
+    br(),
+    br(),
+    h3('NBA in 10s'),
+    fluidRow(
+      column(12,
+             div(style="display: inline-block; width: 30%;",img(src="curry_harden.jpg", height = 180, width = 320)),
+             div(style="display: inline-block; width: 30%;",img(src="george_leonard.jpg", height = 180, width = 320)),
+             div(style="display: inline-block; width: 30%;",img(src="jokic_embiid.jpg", height = 180, width = 320))
+             )
+      )
+    )
+)
+
+
 tab_score <- navbarMenu(
   'Scoring',
   tabPanel(
@@ -39,10 +78,10 @@ tab_score <- navbarMenu(
     sidebarPanel(
       h2('Scoring'),
       p("This part shows analysis of changes in players' scoring methods and efficiency during last 15 years in NBA. Definitions of terminologies we'll mention are on the right part.", style = "font-family: 'times'; font-size: 14pt"),
-      img(src = "kobe.png")
+      img(src = "bryant.png")
     ),
     mainPanel(
-      setBackgroundImage(src = 'court.jpg'),
+      setBackgroundImage(src = 'court.png'),
       br(),
       strong('Field Goal (FG)', style = "font-family: 'times'; font-size: 16pt"),
       p('In basketball, a field goal is a basket scored on any shot or tap other than a free throw, worth two or three points depending on the distance of the attempt from the basket.', style = "font-family: 'times'; font-size: 14pt"),
@@ -69,7 +108,7 @@ tab_score <- navbarMenu(
     title = 'Field Goal Attempts',
     sidebarLayout(
       sidebarPanel(
-        h2('Field Goal Attemps'),
+        h2('Field Goal Attempts'),
         p('We choose players attend more than 30 games in a season (82 games in total), play for more than 15 minutes per game (48 minutes in total), and at least 0.1 3-pointer attempts.', style = "font-family: 'times'; font-size: 14pt"),
         p("The plot uses 3-pointer and 2-pointer FGA (Field Goal Attempts) as axises and total FGA as markers' size to demostrate scoring methods of teams in different seasons.", style = "font-family: 'times'; font-size: 14pt"),
         p('You can also click on the buttons at top left of the plot to show only your intreseted position.', style = "font-family: 'times'; font-size: 14pt"),
@@ -94,7 +133,7 @@ tab_score <- navbarMenu(
       sidebarPanel(
         h2('Field Goal Percentage'),
         p('We choose players attend more than 30 games in a season (82 games in total), play for more than 15 minutes per game (48 minutes in total), and at least 0.1 3-pointer attempts.', style = "font-family: 'times'; font-size: 14pt"),
-        p("The plot uses 3-pointer and 2-pointer FG% (Field Goal Percentage) as axises and total FGA as markers' size to demostrate scoring effieciency of teams in different seasons.", style = "font-family: 'times'; font-size: 14pt"),
+        p("The plot uses 3-pointer and 2-pointer FG% (Field Goal Percentage) as axises and total FGA as markers' size to demostrate scoring efficiency of teams in different seasons.", style = "font-family: 'times'; font-size: 14pt"),
         p('You can also click on the buttons at top left of the plot to show only your intreseted position.', style = "font-family: 'times'; font-size: 14pt"),
         sliderInput('Season2',
                     label = h4('Season'),
@@ -191,7 +230,7 @@ tab_pass <- navbarMenu(
       img(src = "nash.png")
     ),
     mainPanel(
-      setBackgroundImage(src = 'court.jpg'),
+      setBackgroundImage(src = 'court.png'),
       br(),
       strong('Assit (Ast)', style = "font-family: 'times'; font-size: 16pt"),
       p('In basketball, an assist is attributed to a player who passes the ball to a teammate in a way that leads to a score by field goal, meaning that he or she was "assisting" in the basket.', style = "font-family: 'times'; font-size: 14pt"),
@@ -265,6 +304,7 @@ tab_pass <- navbarMenu(
 ui <- fluidPage(
   navbarPage(
     title = "NBA's 15 years",
+    tab_pos,
     tab_score,
     tab_pass
   )
@@ -302,7 +342,7 @@ server <- function(input, output) {
       animation_opts(
         1000, easing = "elastic", redraw = FALSE
         ) %>%
-      layout(xaxis = list(title = '2 pointer field goal attempts',
+      layout(xaxis = list(title = '2-pointer attempts',
                           titlefont = list(
                             size = 15
                           ),
@@ -310,7 +350,7 @@ server <- function(input, output) {
                           showline = FALSE,
                           zerolinecolor = '939393',
                           layer = 'belowtraces'),
-             yaxis = list(title = '3 pointer field goal attempts',
+             yaxis = list(title = '3-pointer attempts',
                           titlefont = list(
                             size = 15
                           ),
