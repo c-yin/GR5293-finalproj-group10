@@ -36,10 +36,10 @@ tab_pos <- tabPanel(
   'Positions',
   sidebarPanel(
     h2('Traditional'),
-    p("The five basketball positions normally employed by organized basketball teams are the point guard (PG), the shooting guard (SG), the small forward (SF), the power forward (PF), and the center (C). (Note: Correspnding images left to right.)", style = "font-family: 'times'; font-size: 14pt"),
+    p("The five basketball positions normally employed by organized basketball teams are the point guard (PG), the shooting guard (SG), the small forward (SF), the power forward (PF), and the center (C). (Note: Corresponding images left to right.)", style = "font-family: 'times'; font-size: 14pt"),
     p("Typically the point guard is the leader of the team on the court. This position requires substantial ball handling skills and the ability to facilitate the team during a play. The shooting guard, as the name implies, is often the best shooter. As well as being capable of shooting accurately from longer distances, this position tends to also be the best defender on the team. The small forward often has an aggressive approach to the basket when handling the ball. The small forward is also known to make cuts to the basket in efforts to get open for shots. The power forward and the center are usually called the 'frontcourt', often acting as their team's primary rebounders or shot blockers, or receiving passes to take inside shots. The center is typically the larger of the two.", style = "font-family: 'times'; font-size: 14pt"),
     h2('Modern'),
-    p('Guards, Wings, Bigs. That, more than PG, SG, SF, PF, C, is the most best and most relevant way to break it down, to relate eras of dominance to the modern game. (Note: Correspnding images left to right.)', style = "font-family: 'times'; font-size: 14pt"),
+    p('Guards, Wings, Bigs. That, more than PG, SG, SF, PF, C, is the best and most relevant way to break it down, to relate eras of dominance to the modern game. (Note: Corresponding images left to right.)', style = "font-family: 'times'; font-size: 14pt"),
     p('Guards (A.K.A. Ball handlers) were traditional point guards that could run an offense. Wings were previously known as shooting guards and small forwards who could both shoot from outside and attack the rim off the dribble. Bigs were players 6’10 and above who could protect the rim and rebound. While most of those descriptions still might hold true, because defenses have started adjusting and switching so much, players have been forced to expand their games.', style = "font-family: 'times'; font-size: 14pt")
   ),
   mainPanel(
@@ -77,7 +77,7 @@ tab_score <- navbarMenu(
     title = 'Brief Introduction',
     sidebarPanel(
       h2('Scoring'),
-      p("This part shows analysis of changes in players' scoring methods and efficiency during last 15 years in NBA. Definitions of terminologies we'll mention are on the right part.", style = "font-family: 'times'; font-size: 14pt"),
+      p("This part shows an analysis of changes in players' scoring methods and efficiency during last 15 years in NBA. Definitions of terminologies we'll mention are on the right part.", style = "font-family: 'times'; font-size: 14pt"),
       img(src = "bryant.png")
     ),
     mainPanel(
@@ -109,14 +109,15 @@ tab_score <- navbarMenu(
     sidebarLayout(
       sidebarPanel(
         h2('Field Goal Attempts'),
-        p('We choose players attend more than 30 games in a season (82 games in total), play for more than 15 minutes per game (48 minutes in total), and at least 0.1 3-pointer attempts.', style = "font-family: 'times'; font-size: 14pt"),
-        p("The plot uses 3-pointer and 2-pointer FGA (Field Goal Attempts) as axises and total FGA as markers' size to demostrate scoring methods of teams in different seasons.", style = "font-family: 'times'; font-size: 14pt"),
-        p('You can also click on the buttons at top left of the plot to show only your intreseted position.', style = "font-family: 'times'; font-size: 14pt"),
+        p('We choose players attending more than 30 games in a season (82 games in total), playing for more than 15 minutes per game (48 minutes in total), and at least 0.1 3-pointer attempts.', style = "font-family: 'times'; font-size: 14pt"),
+        p("The plot uses 3-pointer and 2-pointer FGA (Field Goal Attempts) as axes and total FGA as markers' size to demonstrate scoring methods of teams in different seasons.", style = "font-family: 'times'; font-size: 14pt"),
+        p('You can also click on the buttons at left top of the plot to show only your interested position.', style = "font-family: 'times'; font-size: 14pt"),
         sliderInput('Season1',
                     label = h4('Season'),
                     min = 2004, max = 2019,
                     value = c(2004, 2019),
                     sep = '',
+                    step = 3,
                     ),
         width = 3,
         uiOutput('team1')
@@ -132,14 +133,15 @@ tab_score <- navbarMenu(
     sidebarLayout(
       sidebarPanel(
         h2('Field Goal Percentage'),
-        p('We choose players attend more than 30 games in a season (82 games in total), play for more than 15 minutes per game (48 minutes in total), and at least 0.1 3-pointer attempts.', style = "font-family: 'times'; font-size: 14pt"),
-        p("The plot uses 3-pointer and 2-pointer FG% (Field Goal Percentage) as axises and total FGA as markers' size to demostrate scoring efficiency of teams in different seasons.", style = "font-family: 'times'; font-size: 14pt"),
-        p('You can also click on the buttons at top left of the plot to show only your intreseted position.', style = "font-family: 'times'; font-size: 14pt"),
+        p('We choose players attend more than 30 games in a season (82 games in total), playing for more than 15 minutes per game (48 minutes in total), and at least 0.1 3-pointer attempts.', style = "font-family: 'times'; font-size: 14pt"),
+        p("The plot uses 3-pointer and 2-pointer FG% (Field Goal Percentage) as axes and total FGA as markers' size to demostrate scoring efficiency of teams in different seasons.", style = "font-family: 'times'; font-size: 14pt"),
+        p('You can also click on the buttons at top left of the plot to show only your interested position.', style = "font-family: 'times'; font-size: 14pt"),
         sliderInput('Season2',
                     label = h4('Season'),
                     min = 2004, max = 2019,
                     value = c(2004, 2019),
                     sep = '',
+                    step = 3,
         ),
         width = 3,
         uiOutput('team2')
@@ -151,18 +153,19 @@ tab_score <- navbarMenu(
   ),
   
   tabPanel(
-    title = '3-Pointer Perforamnce',
+    title = '3-Pointer Performance',
     sidebarLayout(
       sidebarPanel(
-        h2('3-Pointer Perforamnce'),
-        p('We choose players attend more than 30 games in a season (82 games in total), play for more than 15 minutes per game (48 minutes in total), and at least 0.1 3-pointer attempts.', style = "font-family: 'times'; font-size: 14pt"),
-        p("The plot uses 3-pointer and 3-pointer percentage as axises and total FGA as markers' size to demostrate three pointer performance of teams in different seasons.", style = "font-family: 'times'; font-size: 14pt"),
-        p('You can also click on the buttons at top left of the plot to show only your intreseted position.', style = "font-family: 'times'; font-size: 14pt"),
+        h2('3-Pointer Performance'),
+        p('We choose players attending more than 30 games in a season (82 games in total), playing for more than 15 minutes per game (48 minutes in total), and at least 0.1 3-pointer attempts.', style = "font-family: 'times'; font-size: 14pt"),
+        p("The plot uses 3-pointer and 3-pointer percentage as axes and total FGA as markers' size to demonstrate 3-pointer performance of teams in different seasons.", style = "font-family: 'times'; font-size: 14pt"),
+        p('You can also click on the buttons at left top of the plot to show only your interested position.', style = "font-family: 'times'; font-size: 14pt"),
         sliderInput('Season3',
                     label = h4('Season'),
                     min = 2004, max = 2019,
                     value = c(2004, 2019),
                     sep = '',
+                    step = 3,
         ),
         width = 3,
         uiOutput('team3')
@@ -174,18 +177,19 @@ tab_score <- navbarMenu(
   ),
   
   tabPanel(
-    title = '2-Pointer Perforamnce',
+    title = '2-Pointer Performance',
     sidebarLayout(
       sidebarPanel(
-        h2('2-Pointer Perforamnce'),
-        p('We choose players attend more than 30 games in a season (82 games in total), play for more than 15 minutes per game (48 minutes in total).', style = "font-family: 'times'; font-size: 14pt"),
-        p("The plot uses 2-pointer and 2 pointer percentage as axises and total FGA as markers' size to demostrate two pointer performance of teams in different seasons.", style = "font-family: 'times'; font-size: 14pt"),
-        p('You can also click on the buttons at top left of the plot to show only your intreseted position.', style = "font-family: 'times'; font-size: 14pt"),
+        h2('2-Pointer Performance'),
+        p('We choose players attending more than 30 games in a season (82 games in total), playing for more than 15 minutes per game (48 minutes in total).', style = "font-family: 'times'; font-size: 14pt"),
+        p("The plot uses 2-pointer and 2 pointer percentage as axes and total FGA as markers' size to demonstrate 2-pointer performance of teams in different seasons.", style = "font-family: 'times'; font-size: 14pt"),
+        p('You can also click on the buttons at left top of the plot to show only your interested position.', style = "font-family: 'times'; font-size: 14pt"),
         sliderInput('Season4',
                     label = h4('Season'),
                     min = 2004, max = 2019,
                     value = c(2004, 2019),
                     sep = '',
+                    step = 3,
         ),
         width = 3,
         uiOutput('team4')
@@ -201,14 +205,15 @@ tab_score <- navbarMenu(
     sidebarLayout(
       sidebarPanel(
         h2('True Shooting Percentage'),
-        p('We choose players attend more than 30 games in a season (82 games in total), play for more than 15 minutes per game (48 minutes in total).', style = "font-family: 'times'; font-size: 14pt"),
-        p("The plot uses TS% and FG as axises and FGA as markers' size to demostrate shooting ability of teams in different seasons.", style = "font-family: 'times'; font-size: 14pt"),
-        p('You can also click on the buttons at top left of the plot to show only your intreseted position.', style = "font-family: 'times'; font-size: 14pt"),
+        p('We choose players attending more than 30 games in a season (82 games in total), playinging for more than 15 minutes per game (48 minutes in total).', style = "font-family: 'times'; font-size: 14pt"),
+        p("The plot uses TS% and FG as axes and FGA as markers' size to demonstrate shooting ability of teams in different seasons.", style = "font-family: 'times'; font-size: 14pt"),
+        p('You can also click on the buttons at left top of the plot to show only your interested position.', style = "font-family: 'times'; font-size: 14pt"),
         sliderInput('Season5',
                     label = h4('Season'),
                     min = 2004, max = 2019,
                     value = c(2004, 2019),
                     sep = '',
+                    step = 3,
         ),
         width = 3,
         uiOutput('team5')
@@ -226,13 +231,13 @@ tab_pass <- navbarMenu(
     title = 'Brief Introduction',
     sidebarPanel(
       h2('Sharing Ball'),
-      p("This part shows analysis of changes in players' willingness and ability of sharing ball during last 15 years in NBA. Definitions of terminologies we'll mention are on the right part.", style = "font-family: 'times'; font-size: 14pt"),
+      p("This part shows an analysis of changes in players' willingness and ability to share the ball during last 15 years in NBA. Definitions of terminologies we'll mention are on the right part.", style = "font-family: 'times'; font-size: 14pt"),
       img(src = "nash.png")
     ),
     mainPanel(
       setBackgroundImage(src = 'court.png'),
       br(),
-      strong('Assit (Ast)', style = "font-family: 'times'; font-size: 16pt"),
+      strong('Assist (Ast)', style = "font-family: 'times'; font-size: 16pt"),
       p('In basketball, an assist is attributed to a player who passes the ball to a teammate in a way that leads to a score by field goal, meaning that he or she was "assisting" in the basket.', style = "font-family: 'times'; font-size: 14pt"),
       br(),
       br(),
@@ -258,14 +263,15 @@ tab_pass <- navbarMenu(
       sidebarPanel(
         h2('Assist VS Turnover'),
         
-        p('We choose players attend more than 30 games in a season (82 games in total), play for more than 15 minutes per game (48 minutes in total).', style = "font-family: 'times'; font-size: 14pt"),
-        p("The plot uses Assist and Turnover as axises and USG% as markers' size to demostrate shooting ability of teams in different seasons.", style = "font-family: 'times'; font-size: 14pt"),
-        p('You can also click on the buttons at top left of the plot to show only your intreseted position.', style = "font-family: 'times'; font-size: 14pt"),
+        p('We choose players attending more than 30 games in a season (82 games in total), playing for more than 15 minutes per game (48 minutes in total).', style = "font-family: 'times'; font-size: 14pt"),
+        p("The plot uses Assist and Turnover as axes and USG% as markers' size to demonstrate shooting ability of teams in different seasons.", style = "font-family: 'times'; font-size: 14pt"),
+        p('You can also click on the buttons at left top of the plot to show only your interested position.', style = "font-family: 'times'; font-size: 14pt"),
         sliderInput('Season6',
                     label = h4('Season'),
                     min = 2004, max = 2019,
                     value = c(2004, 2019),
                     sep = '',
+                    step = 3,
         ),
         width = 3,
         uiOutput('team6')
@@ -282,14 +288,15 @@ tab_pass <- navbarMenu(
       sidebarPanel(
         h2('Ast% VS Tov%'),
        
-        p('We choose players attend more than 30 games in a season (82 games in total), play for more than 15 minutes per game (48 minutes in total).', style = "font-family: 'times'; font-size: 14pt"),
-        p("The plot uses Ast% and Tov% as axises and USG% as markers' size to demostrate shooting ability of teams in different seasons.", style = "font-family: 'times'; font-size: 14pt"),
-        p('You can also click on the buttons at top left of the plot to show only your intreseted position.', style = "font-family: 'times'; font-size: 14pt"),
+        p('We choose players attending more than 30 games in a season (82 games in total), playing for more than 15 minutes per game (48 minutes in total).', style = "font-family: 'times'; font-size: 14pt"),
+        p("The plot uses Ast% and Tov% as axes and USG% as markers' size to demonstrate shooting ability of teams in different seasons.", style = "font-family: 'times'; font-size: 14pt"),
+        p('You can also click on the buttons at left top of the plot to show only your interested position.', style = "font-family: 'times'; font-size: 14pt"),
         sliderInput('Season7',
                     label = h4('Season'),
                     min = 2004, max = 2019,
                     value = c(2004, 2019),
                     sep = '',
+                    step = 3,
         ),
         width = 3,
         uiOutput('team7')
