@@ -295,7 +295,9 @@ ggplot()+
   geom_point(aes(x=Year,y=hw_ratio),data=data,color="#C9082A",size=4)+
   geom_point(aes(x=Year,y=hw_ratio),data=data,color="white",size=2)+
   scale_x_continuous(breaks=seq(2004,2019))+
-  scale_y_continuous(labels = scales::percent_format(accuracy = 1))+
+  #scale_y_continuous(labels = scales::percent_format(accuracy = 1))+
+  #scale_y_continuous(labels = function(x) {paste0(round(x,3)*100, "%")})+
+  scale_y_continuous(labels = c("90.0%","90.5%","91.0%","91.5%","92.0%"), breaks = c(0.9,0.905,0.91,0.915,0.92))+
   xlab('') +
   ylab('') +
   theme_minimal()+
@@ -425,7 +427,8 @@ p2 <- Team_splits %>% select(year, pctFG3, pctFG2) %>%
   geom_point(color = '#FFFFFF', size = 2) +
   facet_grid(type ~., scales = 'free_y', labeller = as_labeller(c(`pctFG2` = '2 pointer', `pctFG3` = '3 pointer'))) +
   scale_x_continuous(labels = unique(Team_splits$year), breaks = unique(Team_splits$year)) +
-  scale_y_continuous(labels = scales::percent_format(accuracy = 1))+
+  #scale_y_continuous(labels = scales::percent_format(accuracy = 1))+
+  scale_y_continuous(labels = function(x) {paste0(round(x,3)*100, "%")})+
   xlab('') +
   ylab('') +
   ggtitle('Field Goals Percentage') +
@@ -477,7 +480,8 @@ p2 <- Team_shooting %>% filter(distance != 'Back Court Shot') %>% select(distanc
   geom_point(color = '#FFFFFF', size = 2) +
   facet_grid(distance ~ ., scales = 'free_y') +
   scale_x_continuous(labels = unique(Team_splits$year), breaks = unique(Team_splits$year)) +
-  scale_y_continuous(labels = scales::percent_format(accuracy = 1))+
+  #scale_y_continuous(labels = scales::percent_format(accuracy = 1))+
+  scale_y_continuous(labels = function(x) {paste0(round(x,3)*100, "%")})+
   xlab('') +
   ylab('') +
   ggtitle('Field Goals Percentage by Distance') +
