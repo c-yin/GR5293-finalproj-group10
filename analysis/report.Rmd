@@ -74,22 +74,22 @@ Data in Basketball-Reference is stored in XML so that we can directly extract th
 <br>
 General data provides basic players' performance including:
 
-* Profile information like Name, Team, Age, Game Played, Minutes Played, etc.
+* Profile information: Name, Team, Age, Game Played, Minutes Played, etc.
 
-* Shooting performance from 2 pointer, 3 pointer and free throw like Field Goals Made, Field Goals Attempted, Field Goal Percentage, etc.
+* Shooting performance from 2 pointer, 3 pointer, and free throw:  Field Goals Made, Field Goals Attempted, Field Goal Percentage, etc.
 
-* Basic stats per game like Rebounds, Assists, Steals, Blocks, Points, Turnovers, Personal Fouls, etc.
+* Basic stats per game: Rebounds, Assists, Steals, Blocks, Points, Turnovers, Personal Fouls, etc.
 
 <br>
-Advanced data measures and analysis player's ability in one specific area:
+Advanced data measures and analyzes players' abilities in one specific area:
 
-* Overall ratings like Offensive Rating, Defensive Rating, Net Rating, Player Impact Estimate, Usage Percentage, etc.
+* Overall ratings: Offensive Rating, Defensive Rating, Net Rating, Player Impact Estimate, Usage Percentage, etc.
 
-* Passing/Assist ability like Assist Percentage, Assist to Turnover Ratio, Assist Ratio
+* Passing/Assist ability: Assist Percentage, Assist to Turnover Ratio, Assist Ratio
 
-* Rebound ability like Offensive Rebound Percentage, Defensive Rebound Percentage, Rebound Percentage
+* Rebound ability: Offensive Rebound Percentage, Defensive Rebound Percentage, Rebound Percentage
 
-* Shooting ability like Effective Field Goal Percentage, True Shooting Percentage
+* Shooting ability: Effective Field Goal Percentage, True Shooting Percentage
 
 <br>
 Bio dataset contains players' biographical data:
@@ -112,15 +112,17 @@ Bio dataset contains players' biographical data:
 
 * *Month* and *Pre/Post All Stars* give teams' performance changes over time periods
 
-* *Days Rest* tests teams abilities to handle tough schedules 
+* *Days Rest* tests teams' abilities to handle tough schedules 
 
 ### Issues/Problems
 
-Teams in NBA keep changing in these 15 years. Three teams change their team locations and team names thus we may find the teams are not necessarily the same each year. Players can be traded and signed during the season, which makes some players have more records than others in these datasets.
++ Teams in NBA keep changing in these 15 years. Three teams change their team locations and team names thus we may find the teams are not necessarily the same each year. 
 
-Height data in `bio` dataset is saved as character, such as "6-8", which requires us to convert them to numeric.
++ Players can be traded and signed during the season, which makes some players have more records than others in these datasets.
 
-Also, all data are saved as factor, which requires us to convert them to numeric or character.
++ Height data in `bio` dataset is saved as character, such as "6-8", which requires us to convert them to numeric.
+
++ All data are saved as factor, which requires us to convert them to numeric or character.
 
 <br><br>
 
@@ -210,10 +212,10 @@ _* To understand the meaning of all variables, please visit [StatsNBA](https://s
 
 As we can see in the aforementioned tables, there is no missing value in `Teams_splits` and `Team_shooting`. Also, since `Player` and `Players_bio` are similar to each other, we are going to display the missing values of `Players_bio` here.
 
-```{r fig.align="center",fig.cap="Figure 1: Missing values"}
+```{r fig.align="center",fig.cap="Figure: Missing values"}
 visna(Players_bio)
 ```
-The first row in Figure 1 shows that the marjority of the data has no missing values.
+The first row in the above figure shows that the marjority of the data has no missing values.
 
 Those rows that have missed *year_start* variable also missed all the following variables. This is because these columns come from another table: bio. Although the bio table itself has no missing values, it does not contain all the players as `Player` data has.
 
@@ -698,12 +700,31 @@ Another noticeable point is that the ast%/tov% of the _wings_ position is increa
 ## VII. Conclusion
 ***
 
+### Overview of the Result
 + The age the distribution for the past 15 years is almost the same while minimum age has increased by 1 year since NBA had increased the draft-eligible age from 18 to 19.
 + Increasing of average height/weight ratio suggests players are becoming more and more facile and fast.
 + Pace and Points Per Game have a similar increasing trend. The increase in Pace means a more active offense and have higher chances of scoring.
 + The strategy of NBA teams to score more is to try more 3 pointer and keep 2 pointer shots more efficient.
 + NBA teams keep throwing more 3 pointer and in the meanwhile raise the FG% of 2 pointer. They decrease the attempts to shoot from 'low efficiency' regions and focus more near the basket.
 + Assist rises dramatically since 2013 while turnover first rises until 2014 and starts drop till now. This may because in 2013 and 2014 teams started to speed up and encourage passing while players didn’t get used to this style and plenty passes turns into turnover. From 2015, teams began to figure out how to pass the ball right to the scorer and reduce bad passes.
+
+<br>
+
+### Limitations
+
++ Focusing only on the last 15 years' data may lose some long term trends. For example, height and weight data are quite stable in recent years. The change is only noticeable under a 60-years range.
++ We focused more on offense data instead of defense data. This is partly because the defense data is harder to measure.
++ As of offense data, we used mostly shooting data rather than passing data.
++ Since there are too many variables, we only used a limited amount of these variables. We may explore more variables in the future.
+
+<br>
+
+### Future Directions
+
++ Explore the changes in defense aspect.
++ Explore more advanced statistics such as _Shot Charts_, _On/Off Splits_, _Lineup Data_, etc.
++ Explore more detailed data such as researching on a particular game rather than the whole season.
++ Explore spatial data such as which particular point has a higher hit rate.
 
 
 <br><br>
